@@ -45,6 +45,9 @@ def attr_pg_to_dict(attr_pg: AttrPG) -> Attr:
 
 @dataclass
 class ExecInstruction:
+    scope: str
+    """ 作用域 (仅 DEBUG 使用, 追踪当前匹配进行到了哪个 vid) """
+
     type: InstructionType
     """ 指令类型 """
     target_var: str

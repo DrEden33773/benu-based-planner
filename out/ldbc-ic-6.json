@@ -8,6 +8,7 @@
   ],
   "instructions": [
     {
+      "scope": "post",
       "type": "init",
       "single_op": "",
       "multi_ops": [],
@@ -19,6 +20,7 @@
       "depend_on": []
     },
     {
+      "scope": "post",
       "type": "get_adj",
       "single_op": "f^post",
       "multi_ops": [],
@@ -32,19 +34,11 @@
       "depend_on": ["f^post"]
     },
     {
+      "scope": "person",
       "type": "intersect",
       "single_op": "V",
       "multi_ops": [],
       "target_var": "C^person",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": []
-    },
-    {
-      "type": "foreach",
-      "single_op": "C^person",
-      "multi_ops": [],
-      "target_var": "f^person",
       "v_constraint": {
         "Person": {
           "attr": "id",
@@ -54,9 +48,20 @@
         }
       },
       "expand_e_constraint": {},
+      "depend_on": []
+    },
+    {
+      "scope": "person",
+      "type": "foreach",
+      "single_op": "C^person",
+      "multi_ops": [],
+      "target_var": "f^person",
+      "v_constraint": {},
+      "expand_e_constraint": {},
       "depend_on": ["C^person"]
     },
     {
+      "scope": "person",
       "type": "get_adj",
       "single_op": "f^person",
       "multi_ops": [],
@@ -66,22 +71,14 @@
         "a": ["knows", {}],
         "b": ["knows", {}]
       },
-      "depend_on": ["f^person", "C^person"]
+      "depend_on": ["C^person", "f^person"]
     },
     {
+      "scope": "tag",
       "type": "intersect",
       "single_op": "A^post",
       "multi_ops": [],
       "target_var": "C^tag",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": ["A^post", "f^post"]
-    },
-    {
-      "type": "foreach",
-      "single_op": "C^tag",
-      "multi_ops": [],
-      "target_var": "f^tag",
       "v_constraint": {
         "Tag": {
           "attr": "name",
@@ -91,22 +88,24 @@
         }
       },
       "expand_e_constraint": {},
-      "depend_on": ["A^post", "f^post", "C^tag"]
+      "depend_on": ["f^post", "A^post"]
     },
     {
+      "scope": "tag",
+      "type": "foreach",
+      "single_op": "C^tag",
+      "multi_ops": [],
+      "target_var": "f^tag",
+      "v_constraint": {},
+      "expand_e_constraint": {},
+      "depend_on": ["C^tag", "A^post", "f^post"]
+    },
+    {
+      "scope": "otherTag",
       "type": "intersect",
       "single_op": "A^post",
       "multi_ops": [],
       "target_var": "C^otherTag",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": ["A^post", "f^post"]
-    },
-    {
-      "type": "foreach",
-      "single_op": "C^otherTag",
-      "multi_ops": [],
-      "target_var": "f^otherTag",
       "v_constraint": {
         "Tag": {
           "attr": "name",
@@ -116,18 +115,32 @@
         }
       },
       "expand_e_constraint": {},
-      "depend_on": ["A^post", "f^post", "C^otherTag"]
+      "depend_on": ["f^post", "A^post"]
     },
     {
-      "type": "intersect",
-      "single_op": "",
-      "multi_ops": ["A^post", "A^person"],
-      "target_var": "T^otherPerson",
+      "scope": "otherTag",
+      "type": "foreach",
+      "single_op": "C^otherTag",
+      "multi_ops": [],
+      "target_var": "f^otherTag",
       "v_constraint": {},
       "expand_e_constraint": {},
-      "depend_on": ["f^person", "A^person", "A^post", "f^post", "C^person"]
+      "depend_on": ["C^otherTag", "A^post", "f^post"]
     },
     {
+      "scope": "otherPerson",
+      "type": "intersect",
+      "single_op": "",
+      "multi_ops": ["A^person", "A^post"],
+      "target_var": "T^otherPerson",
+      "v_constraint": {
+        "Person": {}
+      },
+      "expand_e_constraint": {},
+      "depend_on": ["A^person", "f^person", "f^post", "C^person", "A^post"]
+    },
+    {
+      "scope": "otherPerson",
       "type": "intersect",
       "single_op": "T^otherPerson",
       "multi_ops": [],
@@ -135,59 +148,59 @@
       "v_constraint": {},
       "expand_e_constraint": {},
       "depend_on": [
-        "f^person",
         "A^person",
-        "A^post",
+        "T^otherPerson",
         "f^post",
         "C^person",
-        "T^otherPerson"
+        "f^person",
+        "A^post"
       ]
     },
     {
+      "scope": "otherPerson",
       "type": "foreach",
       "single_op": "C^otherPerson",
       "multi_ops": [],
       "target_var": "f^otherPerson",
-      "v_constraint": {
-        "Person": {}
-      },
+      "v_constraint": {},
       "expand_e_constraint": {},
       "depend_on": [
-        "f^person",
-        "C^otherPerson",
         "A^person",
-        "A^post",
+        "T^otherPerson",
+        "f^person",
         "f^post",
         "C^person",
-        "T^otherPerson"
+        "C^otherPerson",
+        "A^post"
       ]
     },
     {
+      "scope": "otherPerson",
       "type": "report",
       "single_op": "",
       "multi_ops": [
         "f^otherTag",
-        "f^tag",
         "f^post",
         "f^otherPerson",
+        "f^tag",
         "f^person"
       ],
       "target_var": "f",
       "v_constraint": {},
       "expand_e_constraint": {},
       "depend_on": [
-        "f^post",
-        "C^person",
-        "f^tag",
-        "f^otherPerson",
-        "f^person",
-        "C^otherPerson",
         "A^person",
+        "T^otherPerson",
         "C^tag",
-        "A^post",
-        "f^otherTag",
+        "f^person",
         "C^otherTag",
-        "T^otherPerson"
+        "f^otherPerson",
+        "C^person",
+        "C^otherPerson",
+        "f^otherTag",
+        "f^post",
+        "f^tag",
+        "A^post"
       ]
     }
   ]
