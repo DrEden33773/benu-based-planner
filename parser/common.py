@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import StrEnum
 
 
-class ParsingError(RuntimeError):
+class ParsingPGError(RuntimeError):
     pass
 
 

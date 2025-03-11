@@ -5,8 +5,7 @@
 """
 
 from functools import lru_cache
-
-from common import AttrType, Edge, Op, ParsingError
+from parser.common import AttrType, Edge, Op, ParsingPGError
 
 
 class AttrPG:
@@ -41,7 +40,7 @@ class AttrPG:
             case ">=":
                 self.op = Op.Ge
             case _:
-                raise ParsingError(f"Invalid operator: {raw_op}")
+                raise ParsingPGError(f"Invalid operator: {raw_op}")
 
         # Literal
         match raw_pred[cursor]:
@@ -49,18 +48,18 @@ class AttrPG:
                 self.r_value = int(raw_pred[cursor:])
                 self.r_type = AttrType.Int
             case c if c == "'" and raw_pred[-1] != "'":
-                raise ParsingError("Unclosed string literal (missing `'`).")
+                raise ParsingPGError("Unclosed string literal (missing `'`).")
             case c if c == '"' and raw_pred[-1] != '"':
-                raise ParsingError('Unclosed string literal (missing `"`).')
+                raise ParsingPGError('Unclosed string literal (missing `"`).')
             case c if c == "'" or c == '"':
                 self.r_value = raw_pred[cursor + 1 : -1]  # remove quotes
                 self.r_type = AttrType.String
             case _:
-                raise ParsingError(f"Unexpected character: {raw_pred[cursor]}")
+                raise ParsingPGError(f"Unexpected character: {raw_pred[cursor]}")
 
         # Currently, `string` only support `Eq` and `Ne`.
         if self.r_type == AttrType.String and self.op not in (Op.Eq, Op.Ne):
-            raise ParsingError(
+            raise ParsingPGError(
                 f"Invalid operator for string literal: {self.op.name}({self.op})"
             )
 
@@ -123,45 +122,15 @@ class ParserPG:
 
         print("=" * (20 + len(HEADER)) + "\n")
 
-    def get_default_matching_order(self):
-        """默认顺序: 字典序 (后续改为启发式)"""
-        the_list = list(self.v_labels.keys())
-        return sorted(the_list)
-
-    def has_e(self, start_vid: str, end_vid: str):
-        return (start_vid, end_vid) in self.vv_to_e
-
-    def get_e(self, start_vid: str, end_vid: str):
-        return self.vv_to_e.get((start_vid, end_vid))
-
-    def must_get_e(self, start_vid: str, end_vid: str):
-        edge = self.get_e(start_vid, end_vid)
-        if not edge:
-            raise ParsingError(f"Missing edge from `{start_vid}` to `{end_vid}`.")
-        return edge
-
-    def get_e_attr(self, start_vid: str, end_vid: str):
-        edge = self.get_e(start_vid, end_vid)
-        if edge:
-            return self.e_attrs.get(edge.eid)
-
-    def must_get_e_attr(self, start_vid: str, end_vid: str):
-        e_attr = self.get_e_attr(start_vid, end_vid)
-        if not e_attr:
-            raise ParsingError(
-                f"Missing edge attribute from `{start_vid}` to `{end_vid}`."
-            )
-        return e_attr
-
     def parse(self):
         lines = self.src.strip().split("\n")
         lines = list(filter(lambda x: x, lines))
         if len(lines) < 1:
-            raise ParsingError("Missing `N M C1 C2` args.")
+            raise ParsingPGError("Missing `N M C1 C2` args.")
 
         args = lines[0].split()
         if len(args) != 4:
-            raise ParsingError("Invalid `N M C1 C2` args.")
+            raise ParsingPGError("Invalid `N M C1 C2` args.")
 
         self.v_num, self.e_num, self.v_attr_num, self.e_attr_num = map(int, args)
         self.line += 1
@@ -169,7 +138,7 @@ class ParserPG:
         for line in lines[self.line : self.line + self.v_num]:
             args = line.split()
             if len(args) != 2:
-                raise ParsingError("Invalid `(vid, v_label)` pair.")
+                raise ParsingPGError("Invalid `(vid, v_label)` pair.")
             vid, v_label = args
             self.v_labels[vid] = v_label
         self.line += self.v_num
@@ -177,37 +146,39 @@ class ParserPG:
         for line in lines[self.line : self.line + self.e_num]:
             args = line.split()
             if len(args) != 4:
-                raise ParsingError(
+                raise ParsingPGError(
                     "Invalid `[eid, start_vid, end_vid, e_label]` tuple."
                 )
             eid, start_vid, end_vid, e_label = args
             edge = Edge(eid, start_vid, end_vid)
             self.e_labels[edge] = e_label
             if (e := self.vv_to_e.get((start_vid, end_vid))) and e != edge:
-                raise ParsingError(f"Duplicate edge from `{start_vid}` to `{end_vid}`.")
+                raise ParsingPGError(
+                    f"Duplicate edge from `{start_vid}` to `{end_vid}`."
+                )
             self.vv_to_e[(start_vid, end_vid)] = edge
         self.line += self.e_num
 
         for line in lines[self.line : self.line + self.v_attr_num]:
             args = line.split()
             if len(args) < 3:
-                raise ParsingError("Invalid `[vid, attr, pred]` tuple.")
+                raise ParsingPGError("Invalid `[vid, attr, pred]` tuple.")
             vid, attr, splitted_pred = args[0], args[1], args[2:]
             raw_pred = "".join(splitted_pred)
             try:
                 self.v_attrs[vid] = parse_attr_pg(attr, raw_pred)
-            except ParsingError as e:
+            except ParsingPGError as e:
                 raise e
         self.line += self.v_attr_num
 
         for line in lines[self.line : self.line + self.e_attr_num]:
             args = line.split()
             if len(args) < 3:
-                raise ParsingError("Invalid `[eid, attr, pred]` tuple.")
+                raise ParsingPGError("Invalid `[eid, attr, pred]` tuple.")
             eid, attr, splitted_pred = args[0], args[1], args[2:]
             raw_pred = "".join(splitted_pred)
             try:
                 self.e_attrs[eid] = parse_attr_pg(attr, raw_pred)
-            except ParsingError as e:
+            except ParsingPGError as e:
                 raise e
         self.line += self.e_attr_num

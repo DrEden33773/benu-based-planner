@@ -1,13 +1,16 @@
 from dataclasses import dataclass, field
 from enum import StrEnum, auto
+from functools import lru_cache
+from parser.common import AttrType, Op
 from parser.pg_parser import AttrPG
+from typing import Any, TypedDict
 
 
 class InstructionType(StrEnum):
     Init = auto()
     """ BENU.INI """
 
-    GetAdj = auto()
+    GetAdj = "get_adj"
     """ BENU.DBQ """
 
     Intersect = auto()
@@ -23,6 +26,23 @@ class InstructionType(StrEnum):
     """ BENU.RES """
 
 
+class Attr(TypedDict):
+    attr: str
+    op: Op
+    value: int | str
+    type: AttrType
+
+
+@lru_cache
+def attr_pg_to_dict(attr_pg: AttrPG) -> Attr:
+    return {
+        "attr": attr_pg.attr,
+        "op": attr_pg.op,
+        "value": attr_pg.r_value,
+        "type": attr_pg.r_type,
+    }
+
+
 @dataclass
 class ExecInstruction:
     type: InstructionType
@@ -35,7 +55,7 @@ class ExecInstruction:
     multi_ops: list[str] = field(default_factory=list)
     """ 输入变量 (多个) """
 
-    v_constraint: dict[str, AttrPG] = field(default_factory=dict)
+    v_constraint: dict[str, Attr | dict[str, Any]] = field(default_factory=dict)
     """
     顶点约束
     
@@ -43,7 +63,9 @@ class ExecInstruction:
     - `value`: `v_attr`
     """
 
-    expand_e_constraint: dict[str, tuple[str, AttrPG]] = field(default_factory=dict)
+    expand_e_constraint: dict[str, tuple[str, Attr | dict[str, Any]]] = field(
+        default_factory=dict
+    )
     """
     扩展边约束
     

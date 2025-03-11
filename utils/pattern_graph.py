@@ -1,6 +1,9 @@
 from dataclasses import dataclass, field
 from parser.common import Edge
 from parser.pg_parser import AttrPG
+from typing import Any
+
+from plan_gen.exec_instr import Attr, attr_pg_to_dict
 
 
 @dataclass
@@ -74,24 +77,34 @@ class PatternGraph:
 
     def get_v_constraint(self, vid: str):
         """获取顶点 vid 的标签和属性"""
-
-        return self.v_labels[vid], self.v_attrs[vid]
+        label = self.v_labels[vid]
+        attr: Attr | dict[str, Any] = (
+            attr_pg_to_dict(self.v_attrs[vid]) if vid in self.v_attrs else {}
+        )
+        return label, attr
 
     def get_e_constraint_from_edge(self, edge: Edge):
         """获取边 edge 的标签和属性"""
 
-        return self.e_labels[edge], self.e_attrs[edge.eid]
+        label = self.e_labels[edge]
+        attr: Attr | dict[str, Any] = (
+            attr_pg_to_dict(self.e_attrs[edge.eid]) if edge.eid in self.e_attrs else {}
+        )
+        return label, attr
 
     def get_e_constraint_from_vids(self, from_vid: str, to_vid: str):
         """获取边 (from_vid, to_vid) 的标签和属性"""
 
         edge = self.vv_to_e[(from_vid, to_vid)]
-        return self.e_labels[edge], self.e_attrs[edge.eid]
+        attr: Attr | dict[str, Any] = (
+            attr_pg_to_dict(self.e_attrs[edge.eid]) if edge.eid in self.e_attrs else {}
+        )
+        return self.e_labels[edge], attr
 
     def get_adj_e_constraints(self, vid: str):
         """获取顶点 vid 的邻接边的标签和属性"""
 
-        adj_e_constraints = dict[str, tuple[str, AttrPG]]()
+        adj_e_constraints = dict[str, tuple[str, Attr | dict[str, Any]]]()
         for from_vid, to_vid in self.vv_to_e:
             if vid in (from_vid, to_vid):
                 edge = self.vv_to_e[(from_vid, to_vid)]

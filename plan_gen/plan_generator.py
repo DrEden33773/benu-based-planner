@@ -1,9 +1,11 @@
+import json
 from parser.common import AttrType, Op
 from parser.pg_parser import ParserPG
+from typing import Any
 
-import common
-from common import VarPrefix
-from exec_instr import ExecInstruction, InstructionType
+import plan_gen.common as common
+from plan_gen.common import VarPrefix
+from plan_gen.exec_instr import ExecInstruction, InstructionType
 from utils.pattern_graph import PatternGraph
 
 
@@ -29,6 +31,9 @@ class PlanGenerator:
         self.vertex_metrics: dict[str, float] = {}
         """ 顶点 `选择性与度数` 评分 """
 
+        self.exec_plan: list[ExecInstruction] = []
+        """ 最终执行计划 """
+
     def generate_optimal_plan(self):
         """生成最优执行计划"""
 
@@ -38,12 +43,55 @@ class PlanGenerator:
         self._compute_vertex_metrics()
         self._determine_matching_order_on_metrics()
 
-        _raw_plan = self._generate_raw_plan(self.matching_order)
+        self._generate_raw_plan(self.matching_order)
+        self._apply_optimization()
 
-    def _generate_raw_plan(self, ordered: list[str]) -> list[ExecInstruction]:
+    def dump_plan_to_json_file(self, file_path: str) -> None:
+        """将执行计划转储到 JSON 文件"""
+        json_plan = self.generate_json_exec_plan()
+
+        if not file_path.endswith(".json"):
+            file_path += ".json"
+
+        with open(file_path, "w") as file:
+            file.write(json_plan)
+
+        print(f'  Plan saved to "{file_path.replace('\\', '/')}"')
+
+    def generate_json_exec_plan(self):
+        """生成执行计划的 JSON 文本"""
+
+        plan_dict: dict[str, Any] = {
+            "matchingOrderPairs": self.matching_order_pairs,
+            "instructions": [
+                {
+                    "type": instr.type,
+                    "single_op": instr.single_op,
+                    "multi_ops": instr.multi_ops,
+                    "target_var": instr.target_var,
+                    "v_constraint": instr.v_constraint,
+                    "expand_e_constraint": instr.expand_e_constraint,
+                    "depend_on": instr.depend_on,
+                }
+                for instr in self.exec_plan
+            ],
+        }
+
+        return json.dumps(plan_dict, indent=2)
+
+    def _apply_optimization(self):
+        """应用优化策略"""
+        if not self.exec_plan:
+            return
+
+        from plan_gen.plan_optimizer import PlanOptimizer
+
+        PlanOptimizer(self).apply_optimization()
+
+    def _generate_raw_plan(self, ordered: list[str]):
         """生成原始执行计划 (无优化, 按照给定顺序)"""
         if not ordered:
-            return []
+            return
 
         exec_plan: list[ExecInstruction] = []
         f_set = set[str]()
@@ -152,7 +200,7 @@ class PlanGenerator:
         self._remove_unused_dbq(exec_plan)
         self._elimination_uni_operand(exec_plan)
 
-        return exec_plan
+        self.exec_plan = exec_plan
 
     def _calc_exec_plan_dependencies(self, exec_plan: list[ExecInstruction]):
         """构建执行计划的依赖关系"""
