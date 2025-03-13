@@ -1,9 +1,18 @@
 from dataclasses import dataclass, field
 from parser.common import Edge
-from parser.pg_parser import AttrPG
-from typing import Any
+from parser.pg_parser import AttrPG, SerializableAttrPG, attr_pg_to_serializable
 
-from plan_gen.exec_instr import Attr, attr_pg_to_dict
+type EmptyDict = dict[str, str]
+""" ## 空字典 """
+type AttrInfo = SerializableAttrPG | EmptyDict
+""" ## 属性信息 = 属性字典 | 空字典 """
+type VertexInfo = tuple[str, AttrInfo]
+""" ### 标签, (属性) """
+type EdgeInfo = tuple[str, str, str, AttrInfo]
+""" ### 起点 vid, 终点 vid, 标签, (属性) """
+
+type VertexInfoDict = dict[str, VertexInfo]
+type EdgeInfoDict = dict[str, EdgeInfo]
 
 
 @dataclass
@@ -41,7 +50,11 @@ class PatternGraph:
             self.vv_to_e[(edge.from_vid, edge.to_vid)] = edge
 
     def get_adj_v(self, vid: str):
-        """获取顶点 vid 的邻接顶点集合"""
+        """
+        获取顶点 vid 的邻接顶点集合
+
+        - 连接 `邻接顶点 adj_vid` 和 `顶点 vid` 的边, 方向不限
+        """
 
         adj_v = set[str]()
         for from_vid, to_vid in self.vv_to_e:
@@ -52,7 +65,11 @@ class PatternGraph:
         return adj_v
 
     def get_adj_e(self, vid: str):
-        """获取顶点 vid 的邻接边集合"""
+        """
+        获取顶点 vid 的邻接边集合
+
+        - 邻接边, 可以是 vid 的 `出边` 或 `入边`
+        """
 
         adj_e = set[Edge]()
         for from_vid, to_vid in self.vv_to_e:
@@ -75,38 +92,68 @@ class PatternGraph:
 
         return self.v_labels.keys()
 
-    def get_v_constraint(self, vid: str):
-        """获取顶点 vid 的标签和属性"""
-        label = self.v_labels[vid]
-        attr: Attr | dict[str, Any] = (
-            attr_pg_to_dict(self.v_attrs[vid]) if vid in self.v_attrs else {}
+    def get_v_info(self, vid: str) -> VertexInfo:
+        """
+        获取顶点 vid 的:
+
+        - 标签
+        - 属性
+        """
+
+        return self.v_labels[vid], attr_pg_to_serializable(self.v_attrs.get(vid))
+
+    def get_all_v_info(self) -> VertexInfoDict:
+        """
+        获取所有顶点的:
+
+        - vid
+        - 标签
+        - 属性
+        """
+
+        return {vid: self.get_v_info(vid) for vid in self.v_labels}
+
+    def get_e_info(self, edge: Edge) -> EdgeInfo:
+        """
+        获取边 edge 的:
+
+        - 起点 vid
+        - 终点 vid
+        - 标签
+        - 属性
+        """
+
+        return (
+            edge.from_vid,
+            edge.to_vid,
+            self.e_labels[edge],
+            attr_pg_to_serializable(self.e_attrs.get(edge.eid)),
         )
-        return label, attr
 
-    def get_e_constraint_from_edge(self, edge: Edge):
-        """获取边 edge 的标签和属性"""
+    def get_adj_e_info(self, vid: str) -> EdgeInfoDict:
+        """
+        获取顶点 vid 所有邻接边的:
 
-        label = self.e_labels[edge]
-        attr: Attr | dict[str, Any] = (
-            attr_pg_to_dict(self.e_attrs[edge.eid]) if edge.eid in self.e_attrs else {}
-        )
-        return label, attr
+        - eid
+        - 起点 vid
+        - 终点 vid
+        - 标签
+        - 属性
 
-    def get_e_constraint_from_vids(self, from_vid: str, to_vid: str):
-        """获取边 (from_vid, to_vid) 的标签和属性"""
+        (邻接边 `不限制` 方向)
+        """
 
-        edge = self.vv_to_e[(from_vid, to_vid)]
-        attr: Attr | dict[str, Any] = (
-            attr_pg_to_dict(self.e_attrs[edge.eid]) if edge.eid in self.e_attrs else {}
-        )
-        return self.e_labels[edge], attr
+        return {edge.eid: self.get_e_info(edge) for edge in self.get_adj_e(vid)}
 
-    def get_adj_e_constraints(self, vid: str):
-        """获取顶点 vid 的邻接边的标签和属性"""
+    def get_all_e_info(self) -> EdgeInfoDict:
+        """
+        获取所有边的:
 
-        adj_e_constraints = dict[str, tuple[str, Attr | dict[str, Any]]]()
-        for from_vid, to_vid in self.vv_to_e:
-            if vid in (from_vid, to_vid):
-                edge = self.vv_to_e[(from_vid, to_vid)]
-                adj_e_constraints[edge.eid] = self.get_e_constraint_from_edge(edge)
-        return adj_e_constraints
+        - eid
+        - 起点 vid
+        - 终点 vid
+        - 标签
+        - 属性
+        """
+
+        return {edge.eid: self.get_e_info(edge) for edge in self.e_labels}

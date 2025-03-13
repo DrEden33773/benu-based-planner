@@ -15,7 +15,7 @@ class PlanOptimizer:
         self.Ti = 0
 
     def apply_optimization(self):
-        if not self.plan_generator.exec_plan:
+        if not self.exec_plan:
             return
 
         # 1. 移除 `公共子表达式`
@@ -107,7 +107,7 @@ class PlanOptimizer:
         print("    [Reorder Instructions ... Done]")
 
     def _flatten(self):
-        """展开所有指令 (multi_ops 最多只有两个 operands)"""
+        """展开所有指令 (multi_ops 最多只有一个 operands)"""
 
         exec_plan = self.exec_plan
         instr_idx: list[int] = []
@@ -132,13 +132,13 @@ class PlanOptimizer:
                 operators.remove(op1)
                 operators.remove(op2)
                 self.Ti += 1
-                operators.insert(0, VarPrefix.IntersectTarget + self.Ti)
+                operators.insert(0, VarPrefix.IntersectTarget + f"@{self.Ti}")
                 old_instr = exec_plan[pos + 1]
                 new_instr = ExecInstruction(
                     scope=old_instr.scope,
                     type=InstructionType.Intersect,
-                    target_var=VarPrefix.IntersectTarget + self.Ti,
                     multi_ops=new_operators,
+                    target_var=VarPrefix.IntersectTarget + f"@{self.Ti}",
                 )
                 exec_plan.insert(pos, new_instr)
                 pos += 1

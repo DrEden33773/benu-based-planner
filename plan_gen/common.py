@@ -1,8 +1,7 @@
 from enum import StrEnum
 from typing import Any
 
-STR_TUPLE_SPLITTER = "^"
-ALLOW_UNI_INTERSECT = True
+from planner_profile import STR_TUPLE_SPLITTER
 
 
 class VarPrefix(StrEnum):
@@ -15,8 +14,3 @@ class VarPrefix(StrEnum):
 
     def __add__(self, other: Any):
         return self.value + STR_TUPLE_SPLITTER + str(other)
-
-
-if __name__ == "__main__":
-    for i, e in enumerate(VarPrefix):
-        print(e + i)

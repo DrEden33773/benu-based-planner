@@ -1,5 +1,12 @@
 {
-  "matchingOrder": ["post", "person", "tag", "otherTag", "otherPerson"],
+  "matchingOrder": [
+    "otherPerson",
+    "post",
+    "person",
+    "thirdPerson",
+    "tag",
+    "otherTag"
+  ],
   "vertices": {
     "person": [
       "Person",
@@ -11,6 +18,15 @@
       }
     ],
     "otherPerson": ["Person", {}],
+    "thirdPerson": [
+      "Person",
+      {
+        "attr": "id",
+        "op": "=",
+        "value": 456,
+        "type": "int"
+      }
+    ],
     "tag": [
       "Tag",
       {
@@ -36,12 +52,38 @@
     "b": ["otherPerson", "person", "knows", {}],
     "c": ["post", "otherPerson", "hasCreator", {}],
     "d": ["post", "tag", "hasTag", {}],
-    "e": ["post", "otherTag", "hasTag", {}]
+    "e": ["post", "otherTag", "hasTag", {}],
+    "f": ["thirdPerson", "otherPerson", "knows", {}],
+    "g": ["otherPerson", "thirdPerson", "knows", {}]
   },
   "instructions": [
     {
       "type": "init",
       "single_op": "",
+      "multi_ops": [],
+      "target_var": "f^otherPerson",
+      "vid": "otherPerson",
+      "expand_eid_list": []
+    },
+    {
+      "type": "get_adj",
+      "single_op": "f^otherPerson",
+      "multi_ops": [],
+      "target_var": "A^otherPerson",
+      "vid": "otherPerson",
+      "expand_eid_list": ["a", "g", "f", "b", "c"]
+    },
+    {
+      "type": "intersect",
+      "single_op": "A^otherPerson",
+      "multi_ops": [],
+      "target_var": "C^post",
+      "vid": "post",
+      "expand_eid_list": []
+    },
+    {
+      "type": "foreach",
+      "single_op": "C^post",
       "multi_ops": [],
       "target_var": "f^post",
       "vid": "post",
@@ -56,8 +98,8 @@
       "expand_eid_list": ["e", "d", "c"]
     },
     {
-      "type": "init",
-      "single_op": "",
+      "type": "intersect",
+      "single_op": "A^otherPerson",
       "multi_ops": [],
       "target_var": "C^person",
       "vid": "person",
@@ -72,12 +114,20 @@
       "expand_eid_list": []
     },
     {
-      "type": "get_adj",
-      "single_op": "f^person",
+      "type": "intersect",
+      "single_op": "A^otherPerson",
       "multi_ops": [],
-      "target_var": "A^person",
-      "vid": "person",
-      "expand_eid_list": ["b", "a"]
+      "target_var": "C^thirdPerson",
+      "vid": "thirdPerson",
+      "expand_eid_list": []
+    },
+    {
+      "type": "foreach",
+      "single_op": "C^thirdPerson",
+      "multi_ops": [],
+      "target_var": "f^thirdPerson",
+      "vid": "thirdPerson",
+      "expand_eid_list": []
     },
     {
       "type": "intersect",
@@ -112,41 +162,18 @@
       "expand_eid_list": []
     },
     {
-      "type": "intersect",
-      "single_op": "",
-      "multi_ops": ["A^person", "A^post"],
-      "target_var": "T^otherPerson",
-      "vid": "otherPerson",
-      "expand_eid_list": []
-    },
-    {
-      "type": "intersect",
-      "single_op": "T^otherPerson",
-      "multi_ops": [],
-      "target_var": "C^otherPerson",
-      "vid": "otherPerson",
-      "expand_eid_list": []
-    },
-    {
-      "type": "foreach",
-      "single_op": "C^otherPerson",
-      "multi_ops": [],
-      "target_var": "f^otherPerson",
-      "vid": "otherPerson",
-      "expand_eid_list": []
-    },
-    {
       "type": "report",
       "single_op": "",
       "multi_ops": [
         "f^otherTag",
-        "f^otherPerson",
         "f^post",
+        "f^otherPerson",
         "f^tag",
+        "f^thirdPerson",
         "f^person"
       ],
       "target_var": "f",
-      "vid": "otherPerson",
+      "vid": "otherTag",
       "expand_eid_list": []
     }
   ]

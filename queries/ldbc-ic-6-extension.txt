@@ -1,0 +1,21 @@
+6 7 4 0
+
+person Person
+otherPerson Person
+thirdPerson Person
+tag Tag
+otherTag Tag
+post Post
+
+a person otherPerson knows
+b otherPerson person knows
+c post otherPerson hasCreator
+d post tag hasTag
+e post otherTag hasTag
+f thirdPerson otherPerson knows
+g otherPerson thirdPerson knows
+
+person id =123
+tag name ='Computer Science'
+otherTag name !='Art'
+thirdPerson id =456

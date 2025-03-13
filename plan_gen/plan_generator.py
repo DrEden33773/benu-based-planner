@@ -1,11 +1,9 @@
-import json
 from parser.common import AttrType, Op
 from parser.pg_parser import ParserPG
-from typing import Any
 
-import plan_gen.common as common
 from plan_gen.common import VarPrefix
 from plan_gen.exec_instr import ExecInstruction, InstructionType
+from planner_profile import ALLOW_UNI_INTERSECT
 from utils.pattern_graph import PatternGraph
 
 
@@ -18,11 +16,6 @@ class PlanGenerator:
             e_attrs=pg_parser.e_attrs,
         )
         """ `模式图` (`Pattern Graph`, aka. `pg`) """
-
-        self.ti = 0
-        self.db_cost = -1
-        self.optimal_db_matching_order: list[list[int]] = []
-        self.optimal_computational_exec_plan: list[list[ExecInstruction]] = []
 
         self.matching_order: list[str] = []
         """ 顶点匹配顺序 """
@@ -62,24 +55,9 @@ class PlanGenerator:
     def generate_json_exec_plan(self):
         """生成执行计划的 JSON 文本"""
 
-        plan_dict: dict[str, Any] = {
-            "matchingOrderPairs": self.matching_order_pairs,
-            "instructions": [
-                {
-                    "scope": instr.scope,
-                    "type": instr.type,
-                    "single_op": instr.single_op,
-                    "multi_ops": instr.multi_ops,
-                    "target_var": instr.target_var,
-                    "v_constraint": instr.v_constraint,
-                    "expand_e_constraint": instr.expand_e_constraint,
-                    "depend_on": instr.depend_on,
-                }
-                for instr in self.exec_plan
-            ],
-        }
+        from plan_gen.plan_serializer import PlanSerializer
 
-        return json.dumps(plan_dict, indent=2)
+        return PlanSerializer(self).serialize_json()
 
     def _apply_optimization(self):
         """应用优化策略"""
@@ -101,26 +79,24 @@ class PlanGenerator:
 
         # 第一个点
         vid = ordered[0]
-        v_label, v_attr = self.pg.get_v_constraint(vid)
-        expand_e_constraint = self.pg.get_adj_e_constraints(vid)
+        all_adj_eid = [e.eid for e in self.pg.get_adj_e(vid)]
         # Init (直接在这里加上 `点约束`)
         exec_plan.append(
             ExecInstruction(
-                scope=vid,
+                vid=vid,
                 type=InstructionType.Init,
                 single_op="",
                 target_var=VarPrefix.EnumerateTarget + vid,
-                v_constraint={v_label: v_attr},
             )
         )
         # GetAdj
         exec_plan.append(
             ExecInstruction(
-                scope=vid,
+                vid=vid,
                 type=InstructionType.GetAdj,
                 single_op=VarPrefix.EnumerateTarget + vid,
                 target_var=VarPrefix.DbQueryTarget + vid,
-                expand_e_constraint=expand_e_constraint,
+                extend_eid_list=all_adj_eid,
             )
         )
         f_set.add(vid)
@@ -131,30 +107,29 @@ class PlanGenerator:
             operands &= self.pg.get_adj_v(vid)
 
             # (load constraints)
-            v_label, v_attr = self.pg.get_v_constraint(vid)
-            expand_e_constraint = self.pg.get_adj_e_constraints(vid)
+            all_adj_eid = [e.eid for e in self.pg.get_adj_e(vid)]
 
             # Intersect (这一步就加上 `对 scope 进行 点约束`)
             if not operands:
                 # fi = {}, 没有邻接集
+
+                # 感觉这里 BENU 的处理不合适, 直接用 Init 指令就行
                 exec_plan.append(
                     ExecInstruction(
-                        scope=vid,
-                        type=InstructionType.Intersect,
-                        single_op=VarPrefix.DataVertexSet,
+                        vid=vid,
+                        type=InstructionType.Init,
+                        single_op="",
                         target_var=VarPrefix.IntersectCandidate + vid,
-                        v_constraint={v_label: v_attr},
                     )
                 )
             elif len(operands) == 1:
                 # fi = {Ax}
                 exec_plan.append(
                     ExecInstruction(
-                        scope=vid,
+                        vid=vid,
                         type=InstructionType.Intersect,
                         single_op=VarPrefix.DbQueryTarget + operands.copy().pop(),
                         target_var=VarPrefix.IntersectCandidate + vid,
-                        v_constraint={v_label: v_attr},
                     )
                 )
             else:
@@ -162,16 +137,15 @@ class PlanGenerator:
                 multi_ops = [VarPrefix.DbQueryTarget + op for op in operands]
                 exec_plan.append(
                     ExecInstruction(
-                        scope=vid,
+                        vid=vid,
                         type=InstructionType.Intersect,
                         multi_ops=multi_ops,
                         target_var=VarPrefix.IntersectTarget + vid,
-                        v_constraint={v_label: v_attr},
                     )
                 )
                 exec_plan.append(
                     ExecInstruction(
-                        scope=vid,
+                        vid=vid,
                         type=InstructionType.Intersect,
                         single_op=VarPrefix.IntersectTarget + vid,
                         target_var=VarPrefix.IntersectCandidate + vid,
@@ -181,7 +155,7 @@ class PlanGenerator:
             # Foreach
             exec_plan.append(
                 ExecInstruction(
-                    scope=vid,
+                    vid=vid,
                     type=InstructionType.Foreach,
                     single_op=VarPrefix.IntersectCandidate + vid,
                     target_var=VarPrefix.EnumerateTarget + vid,
@@ -190,11 +164,11 @@ class PlanGenerator:
             # GetAdj (加上 `扩展边约束`)
             exec_plan.append(
                 ExecInstruction(
-                    scope=vid,
+                    vid=vid,
                     type=InstructionType.GetAdj,
                     single_op=VarPrefix.EnumerateTarget + vid,
                     target_var=VarPrefix.DbQueryTarget + vid,
-                    expand_e_constraint=expand_e_constraint,
+                    extend_eid_list=all_adj_eid,
                 )
             )
             f_set.add(vid)
@@ -203,7 +177,7 @@ class PlanGenerator:
         embedding = [VarPrefix.EnumerateTarget + fid for fid in f_set]
         exec_plan.append(
             ExecInstruction(
-                scope=vid,
+                vid=vid,
                 type=InstructionType.Report,
                 multi_ops=embedding,
                 target_var=VarPrefix.EnumerateTarget,
@@ -276,7 +250,7 @@ class PlanGenerator:
                 continue
 
             if instr.type == InstructionType.Intersect and instr.is_single_op():
-                if not common.ALLOW_UNI_INTERSECT and instr.target_var.startswith(
+                if not ALLOW_UNI_INTERSECT and instr.target_var.startswith(
                     VarPrefix.IntersectTarget
                 ):
                     record[instr.target_var] = instr.single_op

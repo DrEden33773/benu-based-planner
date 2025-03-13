@@ -1,207 +1,153 @@
 {
-  "matchingOrderPairs": [
-    ["post", "Post"],
-    ["person", "Person"],
-    ["tag", "Tag"],
-    ["otherTag", "Tag"],
-    ["otherPerson", "Person"]
-  ],
+  "matchingOrder": ["post", "person", "tag", "otherTag", "otherPerson"],
+  "vertices": {
+    "person": [
+      "Person",
+      {
+        "attr": "id",
+        "op": "=",
+        "value": 123,
+        "type": "int"
+      }
+    ],
+    "otherPerson": ["Person", {}],
+    "tag": [
+      "Tag",
+      {
+        "attr": "name",
+        "op": "=",
+        "value": "ComputerScience",
+        "type": "string"
+      }
+    ],
+    "otherTag": [
+      "Tag",
+      {
+        "attr": "name",
+        "op": "!=",
+        "value": "Art",
+        "type": "string"
+      }
+    ],
+    "post": ["Post", {}]
+  },
+  "edges": {
+    "a": ["person", "otherPerson", "knows", {}],
+    "b": ["otherPerson", "person", "knows", {}],
+    "c": ["post", "otherPerson", "hasCreator", {}],
+    "d": ["post", "tag", "hasTag", {}],
+    "e": ["post", "otherTag", "hasTag", {}]
+  },
   "instructions": [
     {
-      "scope": "post",
       "type": "init",
       "single_op": "",
       "multi_ops": [],
       "target_var": "f^post",
-      "v_constraint": {
-        "Post": {}
-      },
-      "expand_e_constraint": {},
-      "depend_on": []
+      "vid": "post",
+      "expand_eid_list": []
     },
     {
-      "scope": "post",
       "type": "get_adj",
       "single_op": "f^post",
       "multi_ops": [],
       "target_var": "A^post",
-      "v_constraint": {},
-      "expand_e_constraint": {
-        "c": ["hasCreator", {}],
-        "d": ["hasTag", {}],
-        "e": ["hasTag", {}]
-      },
-      "depend_on": ["f^post"]
+      "vid": "post",
+      "expand_eid_list": ["e", "d", "c"]
     },
     {
-      "scope": "person",
-      "type": "intersect",
-      "single_op": "V",
+      "type": "init",
+      "single_op": "",
       "multi_ops": [],
       "target_var": "C^person",
-      "v_constraint": {
-        "Person": {
-          "attr": "id",
-          "op": "=",
-          "value": 123,
-          "type": "int"
-        }
-      },
-      "expand_e_constraint": {},
-      "depend_on": []
+      "vid": "person",
+      "expand_eid_list": []
     },
     {
-      "scope": "person",
       "type": "foreach",
       "single_op": "C^person",
       "multi_ops": [],
       "target_var": "f^person",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": ["C^person"]
+      "vid": "person",
+      "expand_eid_list": []
     },
     {
-      "scope": "person",
       "type": "get_adj",
       "single_op": "f^person",
       "multi_ops": [],
       "target_var": "A^person",
-      "v_constraint": {},
-      "expand_e_constraint": {
-        "a": ["knows", {}],
-        "b": ["knows", {}]
-      },
-      "depend_on": ["C^person", "f^person"]
+      "vid": "person",
+      "expand_eid_list": ["b", "a"]
     },
     {
-      "scope": "tag",
       "type": "intersect",
       "single_op": "A^post",
       "multi_ops": [],
       "target_var": "C^tag",
-      "v_constraint": {
-        "Tag": {
-          "attr": "name",
-          "op": "=",
-          "value": "ComputerScience",
-          "type": "string"
-        }
-      },
-      "expand_e_constraint": {},
-      "depend_on": ["f^post", "A^post"]
+      "vid": "tag",
+      "expand_eid_list": []
     },
     {
-      "scope": "tag",
       "type": "foreach",
       "single_op": "C^tag",
       "multi_ops": [],
       "target_var": "f^tag",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": ["f^post", "C^tag", "A^post"]
+      "vid": "tag",
+      "expand_eid_list": []
     },
     {
-      "scope": "otherTag",
       "type": "intersect",
       "single_op": "A^post",
       "multi_ops": [],
       "target_var": "C^otherTag",
-      "v_constraint": {
-        "Tag": {
-          "attr": "name",
-          "op": "!=",
-          "value": "Art",
-          "type": "string"
-        }
-      },
-      "expand_e_constraint": {},
-      "depend_on": ["f^post", "A^post"]
+      "vid": "otherTag",
+      "expand_eid_list": []
     },
     {
-      "scope": "otherTag",
       "type": "foreach",
       "single_op": "C^otherTag",
       "multi_ops": [],
       "target_var": "f^otherTag",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": ["f^post", "A^post", "C^otherTag"]
+      "vid": "otherTag",
+      "expand_eid_list": []
     },
     {
-      "scope": "otherPerson",
       "type": "intersect",
       "single_op": "",
-      "multi_ops": ["A^post", "A^person"],
+      "multi_ops": ["A^person", "A^post"],
       "target_var": "T^otherPerson",
-      "v_constraint": {
-        "Person": {}
-      },
-      "expand_e_constraint": {},
-      "depend_on": ["C^person", "f^person", "f^post", "A^post", "A^person"]
+      "vid": "otherPerson",
+      "expand_eid_list": []
     },
     {
-      "scope": "otherPerson",
       "type": "intersect",
       "single_op": "T^otherPerson",
       "multi_ops": [],
       "target_var": "C^otherPerson",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": [
-        "C^person",
-        "f^person",
-        "T^otherPerson",
-        "f^post",
-        "A^post",
-        "A^person"
-      ]
+      "vid": "otherPerson",
+      "expand_eid_list": []
     },
     {
-      "scope": "otherPerson",
       "type": "foreach",
       "single_op": "C^otherPerson",
       "multi_ops": [],
       "target_var": "f^otherPerson",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": [
-        "C^otherPerson",
-        "C^person",
-        "f^person",
-        "f^post",
-        "A^post",
-        "T^otherPerson",
-        "A^person"
-      ]
+      "vid": "otherPerson",
+      "expand_eid_list": []
     },
     {
-      "scope": "otherPerson",
       "type": "report",
       "single_op": "",
       "multi_ops": [
-        "f^post",
         "f^otherTag",
+        "f^otherPerson",
+        "f^post",
         "f^tag",
-        "f^person",
-        "f^otherPerson"
+        "f^person"
       ],
       "target_var": "f",
-      "v_constraint": {},
-      "expand_e_constraint": {},
-      "depend_on": [
-        "f^otherPerson",
-        "C^tag",
-        "f^otherTag",
-        "A^person",
-        "C^person",
-        "f^person",
-        "f^tag",
-        "f^post",
-        "C^otherPerson",
-        "A^post",
-        "C^otherTag",
-        "T^otherPerson"
-      ]
+      "vid": "otherPerson",
+      "expand_eid_list": []
     }
   ]
 }

@@ -6,6 +6,30 @@
 
 from functools import lru_cache
 from parser.common import AttrType, Edge, Op, ParsingPGError
+from typing import Optional, TypedDict
+
+type NullableAttrPG = SerializableAttrPG | dict[str, str]
+
+
+class SerializableAttrPG(TypedDict):
+    attr: str
+    op: Op
+    value: int | str
+    type: AttrType
+
+
+@lru_cache
+def attr_pg_to_serializable(attr_pg: Optional["AttrPG"]) -> NullableAttrPG:
+    return (
+        {
+            "attr": attr_pg.attr,
+            "op": attr_pg.op,
+            "value": attr_pg.r_value,
+            "type": attr_pg.r_type,
+        }
+        if attr_pg
+        else {}
+    )
 
 
 class AttrPG:
@@ -152,10 +176,10 @@ class ParserPG:
             eid, start_vid, end_vid, e_label = args
             edge = Edge(eid, start_vid, end_vid)
             self.e_labels[edge] = e_label
-            if (e := self.vv_to_e.get((start_vid, end_vid))) and e != edge:
-                raise ParsingPGError(
-                    f"Duplicate edge from `{start_vid}` to `{end_vid}`."
-                )
+            # if (e := self.vv_to_e.get((start_vid, end_vid))) and e != edge:
+            #     raise ParsingPGError(
+            #         f"Duplicate edge from `{start_vid}` to `{end_vid}`."
+            #     )
             self.vv_to_e[(start_vid, end_vid)] = edge
         self.line += self.e_num
 
