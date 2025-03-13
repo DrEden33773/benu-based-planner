@@ -139,11 +139,11 @@
       "type": "report",
       "single_op": "",
       "multi_ops": [
-        "f^otherTag",
         "f^otherPerson",
-        "f^post",
+        "f^person",
         "f^tag",
-        "f^person"
+        "f^otherTag",
+        "f^post"
       ],
       "target_var": "f",
       "vid": "otherPerson",

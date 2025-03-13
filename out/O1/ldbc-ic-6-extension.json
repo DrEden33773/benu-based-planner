@@ -71,7 +71,7 @@
       "multi_ops": [],
       "target_var": "A^otherPerson",
       "vid": "otherPerson",
-      "expand_eid_list": ["a", "g", "f", "b", "c"]
+      "expand_eid_list": ["b", "a", "g", "c", "f"]
     },
     {
       "type": "intersect",
@@ -165,12 +165,12 @@
       "type": "report",
       "single_op": "",
       "multi_ops": [
+        "f^otherPerson",
+        "f^person",
+        "f^tag",
         "f^otherTag",
         "f^post",
-        "f^otherPerson",
-        "f^tag",
-        "f^thirdPerson",
-        "f^person"
+        "f^thirdPerson"
       ],
       "target_var": "f",
       "vid": "otherTag",

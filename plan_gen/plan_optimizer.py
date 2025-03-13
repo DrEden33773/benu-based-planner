@@ -135,7 +135,7 @@ class PlanOptimizer:
                 operators.insert(0, VarPrefix.IntersectTarget + f"@{self.Ti}")
                 old_instr = exec_plan[pos + 1]
                 new_instr = ExecInstruction(
-                    scope=old_instr.scope,
+                    vid=old_instr.vid,
                     type=InstructionType.Intersect,
                     multi_ops=new_operators,
                     target_var=VarPrefix.IntersectTarget + f"@{self.Ti}",
@@ -209,7 +209,7 @@ class PlanOptimizer:
                             operators.sort(key=lambda s: int_ops_pos[s])
                             old_instr = exec_plan[instr_idx[i]]
                             new_instr = ExecInstruction(
-                                scope=old_instr.scope,
+                                vid=old_instr.vid,
                                 type=InstructionType.Intersect,
                                 target_var=VarPrefix.IntersectTarget + self.Ti,
                                 multi_ops=operators,
