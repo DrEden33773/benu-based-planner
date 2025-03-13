@@ -7,12 +7,19 @@ from plan_gen.plan_generator import PlanGenerator
 SCRIPT_DIR = Path(__file__).parent.absolute()
 Path(f"{SCRIPT_DIR}/queries").mkdir(exist_ok=True)
 Path(f"{SCRIPT_DIR}/out").mkdir(exist_ok=True)
+Path(f"{SCRIPT_DIR}/out/O3").mkdir(exist_ok=True)
 
 
 def plan_gen(parser: ParserPG, src_filename: str):
     generator = PlanGenerator(parser)
-    generator.generate_optimal_plan()
+    generator.generate_optimal_plan(O3=False)
     generator.dump_plan_to_json_file(f"{SCRIPT_DIR}/out/{src_filename}.json")
+
+
+def plan_gen_o3(parser: ParserPG, src_filename: str):
+    generator = PlanGenerator(parser)
+    generator.generate_optimal_plan(O3=True)
+    generator.dump_plan_to_json_file(f"{SCRIPT_DIR}/out/O3/{src_filename}.json")
 
 
 def main():
@@ -39,6 +46,7 @@ def main():
 
         # Plan generation
         plan_gen(parser, src_filename)
+        plan_gen_o3(parser, src_filename)
 
 
 if __name__ == "__main__":

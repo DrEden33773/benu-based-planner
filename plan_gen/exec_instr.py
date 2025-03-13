@@ -5,6 +5,8 @@ from parser.common import AttrType, Op
 from parser.pg_parser import AttrPG
 from typing import Any, TypedDict
 
+from plan_gen.common import STR_TUPLE_SPLITTER, VarPrefix
+
 
 class InstructionType(StrEnum):
     Init = auto()
@@ -24,6 +26,20 @@ class InstructionType(StrEnum):
 
     Report = auto()
     """ BENU.RES """
+
+    @staticmethod
+    def get_cost_dict():
+        return {
+            InstructionType.Init: 0,
+            InstructionType.GetAdj: 1,
+            InstructionType.Intersect: 2,
+            InstructionType.Foreach: 3,
+            InstructionType.TCache: 4,
+            InstructionType.Report: 5,
+        }
+
+    def compare(self, other: "InstructionType") -> int:
+        return self.get_cost_dict()[self] - self.get_cost_dict()[other]
 
 
 class Attr(TypedDict):
@@ -45,13 +61,13 @@ def attr_pg_to_dict(attr_pg: AttrPG) -> Attr:
 
 @dataclass
 class ExecInstruction:
-    scope: str
-    """ 作用域 (仅 DEBUG 使用, 追踪当前匹配进行到了哪个 vid) """
-
     type: InstructionType
     """ 指令类型 """
     target_var: str
     """ 生成变量 """
+
+    scope: str = ""
+    """ 作用域 (仅 DEBUG 使用, 追踪当前匹配进行到了哪个 vid) """
 
     single_op: str = ""
     """ 输入变量 (单个) """
@@ -81,3 +97,17 @@ class ExecInstruction:
 
     def is_single_op(self) -> bool:
         return bool(self.single_op)
+
+    def resolve_vid_from_target_var(self):
+        if self.target_var == VarPrefix.DataVertexSet:
+            return ""
+        return self.target_var.split(STR_TUPLE_SPLITTER)[1]
+
+    def resolve_vids_from_multi_ops(self):
+        vids: list[str] = []
+        for op in self.multi_ops:
+            if op == VarPrefix.DataVertexSet:
+                vids.append("")
+            else:
+                vids.append(op.split(STR_TUPLE_SPLITTER)[1])
+        return vids

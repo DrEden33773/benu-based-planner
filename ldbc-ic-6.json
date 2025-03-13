@@ -98,7 +98,7 @@
       "target_var": "f^tag",
       "v_constraint": {},
       "expand_e_constraint": {},
-      "depend_on": ["f^post", "C^tag", "A^post"]
+      "depend_on": ["C^tag", "A^post", "f^post"]
     },
     {
       "scope": "otherTag",
@@ -125,19 +125,19 @@
       "target_var": "f^otherTag",
       "v_constraint": {},
       "expand_e_constraint": {},
-      "depend_on": ["C^otherTag", "f^post", "A^post"]
+      "depend_on": ["C^otherTag", "A^post", "f^post"]
     },
     {
       "scope": "otherPerson",
       "type": "intersect",
       "single_op": "",
-      "multi_ops": ["A^post", "A^person"],
+      "multi_ops": ["A^person", "A^post"],
       "target_var": "T^otherPerson",
       "v_constraint": {
         "Person": {}
       },
       "expand_e_constraint": {},
-      "depend_on": ["C^person", "A^post", "f^post", "f^person", "A^person"]
+      "depend_on": ["A^person", "f^person", "f^post", "C^person", "A^post"]
     },
     {
       "scope": "otherPerson",
@@ -148,12 +148,12 @@
       "v_constraint": {},
       "expand_e_constraint": {},
       "depend_on": [
-        "C^person",
-        "A^post",
+        "A^person",
         "T^otherPerson",
         "f^post",
+        "C^person",
         "f^person",
-        "A^person"
+        "A^post"
       ]
     },
     {
@@ -165,13 +165,13 @@
       "v_constraint": {},
       "expand_e_constraint": {},
       "depend_on": [
-        "C^person",
-        "A^post",
+        "A^person",
         "T^otherPerson",
-        "C^otherPerson",
-        "f^post",
         "f^person",
-        "A^person"
+        "f^post",
+        "C^person",
+        "C^otherPerson",
+        "A^post"
       ]
     },
     {
@@ -179,28 +179,28 @@
       "type": "report",
       "single_op": "",
       "multi_ops": [
-        "f^person",
         "f^otherTag",
-        "f^otherPerson",
         "f^post",
-        "f^tag"
+        "f^otherPerson",
+        "f^tag",
+        "f^person"
       ],
       "target_var": "f",
       "v_constraint": {},
       "expand_e_constraint": {},
       "depend_on": [
-        "C^person",
-        "f^otherTag",
+        "A^person",
         "T^otherPerson",
-        "C^otherPerson",
-        "f^otherPerson",
-        "C^otherTag",
-        "f^post",
         "C^tag",
-        "A^post",
-        "f^tag",
         "f^person",
-        "A^person"
+        "C^otherTag",
+        "f^otherPerson",
+        "C^person",
+        "C^otherPerson",
+        "f^otherTag",
+        "f^post",
+        "f^tag",
+        "A^post"
       ]
     }
   ]

@@ -2,6 +2,7 @@
     "python.analysis.autoImportCompletions": true,
     "python.analysis.typeCheckingMode": "strict",
     "cSpell.words": [
+        "Apriori",
         "getadj"
     ]
 }

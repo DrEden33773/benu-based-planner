@@ -34,7 +34,7 @@ class PlanGenerator:
         self.exec_plan: list[ExecInstruction] = []
         """ 最终执行计划 """
 
-    def generate_optimal_plan(self):
+    def generate_optimal_plan(self, O3: bool = True):
         """生成最优执行计划"""
 
         if self.pg.v_num == 0:
@@ -43,8 +43,9 @@ class PlanGenerator:
         self._compute_vertex_metrics()
         self._determine_matching_order_on_metrics()
 
-        self._generate_raw_plan(self.matching_order)
-        self._apply_optimization()
+        self._generate_raw_plan()
+        if O3:
+            self._apply_optimization()
 
     def dump_plan_to_json_file(self, file_path: str) -> None:
         """将执行计划转储到 JSON 文件"""
@@ -89,8 +90,9 @@ class PlanGenerator:
 
         PlanOptimizer(self).apply_optimization()
 
-    def _generate_raw_plan(self, ordered: list[str]):
+    def _generate_raw_plan(self):
         """生成原始执行计划 (无优化, 按照给定顺序)"""
+        ordered = self.matching_order
         if not ordered:
             return
 
@@ -208,13 +210,13 @@ class PlanGenerator:
             )
         )
 
-        self._calc_exec_plan_dependencies(exec_plan)
+        self.compute_exec_plan_dependencies(exec_plan)
         self._remove_unused_dbq(exec_plan)
-        self._elimination_uni_operand(exec_plan)
+        self.elimination_uni_operand(exec_plan)
 
         self.exec_plan = exec_plan
 
-    def _calc_exec_plan_dependencies(self, exec_plan: list[ExecInstruction]):
+    def compute_exec_plan_dependencies(self, exec_plan: list[ExecInstruction]):
         """构建执行计划的依赖关系"""
 
         depend_record: dict[str, set[str]] = {}
@@ -257,7 +259,7 @@ class PlanGenerator:
         del exec_plan[:]
         exec_plan.extend(new_exec_plan)
 
-    def _elimination_uni_operand(self, exec_plan: list[ExecInstruction]):
+    def elimination_uni_operand(self, exec_plan: list[ExecInstruction]):
         """
         消除单操作数的交集操作
 
