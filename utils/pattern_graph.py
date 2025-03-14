@@ -33,8 +33,8 @@ class PatternGraph:
     e_attrs: dict[str, AttrPG]
     """ `eid` -> `e_attr` """
 
-    vv_to_e: dict[tuple[str, str], Edge] = field(default_factory=dict)
-    """ `(from_vid, to_vid)` -> `edge` """
+    vv_to_es: dict[tuple[str, str], list[Edge]] = field(default_factory=dict)
+    """ `(from_vid, to_vid)` -> `[edges]` """
 
     v_num = 0
     e_num = 0
@@ -47,7 +47,8 @@ class PatternGraph:
         self.v_attr_num = len(self.v_attrs)
         self.e_attr_num = len(self.e_attrs)
         for edge in self.e_labels:
-            self.vv_to_e[(edge.from_vid, edge.to_vid)] = edge
+            from_vid, to_vid = edge.from_vid, edge.to_vid
+            self.vv_to_es.setdefault((from_vid, to_vid), []).append(edge)
 
     def get_adj_v(self, vid: str):
         """
@@ -57,7 +58,7 @@ class PatternGraph:
         """
 
         adj_v = set[str]()
-        for from_vid, to_vid in self.vv_to_e:
+        for from_vid, to_vid in self.vv_to_es:
             if from_vid == vid:
                 adj_v.add(to_vid)
             elif to_vid == vid:
@@ -72,20 +73,24 @@ class PatternGraph:
         """
 
         adj_e = set[Edge]()
-        for from_vid, to_vid in self.vv_to_e:
+        for from_vid, to_vid in self.vv_to_es:
             if from_vid == vid or to_vid == vid:
-                adj_e.add(self.vv_to_e[(from_vid, to_vid)])
+                adj_e.update(self.vv_to_es[(from_vid, to_vid)])
         return adj_e
 
     def get_out_degree(self, vid: str):
         """获取顶点 vid 的出度"""
 
-        return sum(1 for start, _ in self.vv_to_e if start == vid)
+        return sum(
+            len(edges) for (start, _end), edges in self.vv_to_es.items() if start == vid
+        )
 
     def get_in_degree(self, vid: str):
         """获取顶点 vid 的入度"""
 
-        return sum(1 for _, end in self.vv_to_e if end == vid)
+        return sum(
+            len(edges) for (_start, end), edges in self.vv_to_es.items() if end == vid
+        )
 
     def get_all_vertices(self):
         """获取所有顶点集合"""
