@@ -29,22 +29,25 @@ class Edge(TypedDict):
 
 
 class DisplayedInstr(TypedDict):
+    vid: str
     type: InstructionType
+    expand_eid_list: list[str]
     single_op: str
     multi_ops: list[str]
     target_var: str
-    vid: str
-    expand_eid_list: list[str]
+    depend_on: list[str]
 
 
 def to_displayed_instr(exec_instr: ExecInstruction) -> DisplayedInstr:
+    # 对 list 排序, 确保每次生成的指令 `相同` 且 `可预测`
     return {
-        "type": exec_instr.type,
-        "single_op": exec_instr.single_op,
-        "multi_ops": exec_instr.multi_ops,
-        "target_var": exec_instr.target_var,
         "vid": exec_instr.vid,
-        "expand_eid_list": exec_instr.extend_eid_list,
+        "type": exec_instr.type,
+        "expand_eid_list": sorted(exec_instr.extend_eid_list),
+        "single_op": exec_instr.single_op,
+        "multi_ops": sorted(exec_instr.multi_ops),
+        "target_var": exec_instr.target_var,
+        "depend_on": sorted(exec_instr.depend_on),
     }
 
 

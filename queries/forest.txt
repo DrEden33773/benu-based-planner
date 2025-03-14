@@ -1,0 +1,18 @@
+5 4 3 1
+
+person Person
+otherPerson Person
+post Post
+otherPost Post
+admin Person
+
+a person otherPerson knows
+b otherPerson person knows
+c post otherPerson hasCreator
+d otherPost admin administratedBy
+
+person career ='student'
+otherPerson career !='student'
+admin career ='engineer'
+
+c createDate ='2025/03/14'

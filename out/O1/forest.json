@@ -1,0 +1,241 @@
+{
+  "matchingOrder": [
+    "otherPerson",
+    "person",
+    "admin",
+    "post",
+    "otherPost"
+  ],
+  "vertices": {
+    "person": [
+      "Person",
+      {
+        "attr": "career",
+        "op": "=",
+        "value": "student",
+        "type": "string"
+      }
+    ],
+    "otherPerson": [
+      "Person",
+      {
+        "attr": "career",
+        "op": "!=",
+        "value": "student",
+        "type": "string"
+      }
+    ],
+    "post": [
+      "Post",
+      {}
+    ],
+    "otherPost": [
+      "Post",
+      {}
+    ],
+    "admin": [
+      "Person",
+      {
+        "attr": "career",
+        "op": "=",
+        "value": "engineer",
+        "type": "string"
+      }
+    ]
+  },
+  "edges": {
+    "a": [
+      "person",
+      "otherPerson",
+      "knows",
+      {}
+    ],
+    "b": [
+      "otherPerson",
+      "person",
+      "knows",
+      {}
+    ],
+    "c": [
+      "post",
+      "otherPerson",
+      "hasCreator",
+      {
+        "attr": "createDate",
+        "op": "=",
+        "value": "2025/03/14",
+        "type": "string"
+      }
+    ],
+    "d": [
+      "otherPost",
+      "admin",
+      "administratedBy",
+      {}
+    ]
+  },
+  "instructions": [
+    {
+      "vid": "otherPerson",
+      "type": "init",
+      "expand_eid_list": [],
+      "single_op": "",
+      "multi_ops": [],
+      "target_var": "f^otherPerson",
+      "depend_on": []
+    },
+    {
+      "vid": "otherPerson",
+      "type": "get_adj",
+      "expand_eid_list": [
+        "a",
+        "b",
+        "c"
+      ],
+      "single_op": "f^otherPerson",
+      "multi_ops": [],
+      "target_var": "A^otherPerson",
+      "depend_on": [
+        "f^otherPerson"
+      ]
+    },
+    {
+      "vid": "person",
+      "type": "intersect",
+      "expand_eid_list": [],
+      "single_op": "A^otherPerson",
+      "multi_ops": [],
+      "target_var": "C^person",
+      "depend_on": [
+        "A^otherPerson",
+        "f^otherPerson"
+      ]
+    },
+    {
+      "vid": "person",
+      "type": "foreach",
+      "expand_eid_list": [],
+      "single_op": "C^person",
+      "multi_ops": [],
+      "target_var": "f^person",
+      "depend_on": [
+        "A^otherPerson",
+        "C^person",
+        "f^otherPerson"
+      ]
+    },
+    {
+      "vid": "admin",
+      "type": "init",
+      "expand_eid_list": [],
+      "single_op": "",
+      "multi_ops": [],
+      "target_var": "C^admin",
+      "depend_on": []
+    },
+    {
+      "vid": "admin",
+      "type": "foreach",
+      "expand_eid_list": [],
+      "single_op": "C^admin",
+      "multi_ops": [],
+      "target_var": "f^admin",
+      "depend_on": [
+        "C^admin"
+      ]
+    },
+    {
+      "vid": "admin",
+      "type": "get_adj",
+      "expand_eid_list": [
+        "d"
+      ],
+      "single_op": "f^admin",
+      "multi_ops": [],
+      "target_var": "A^admin",
+      "depend_on": [
+        "C^admin",
+        "f^admin"
+      ]
+    },
+    {
+      "vid": "post",
+      "type": "intersect",
+      "expand_eid_list": [],
+      "single_op": "A^otherPerson",
+      "multi_ops": [],
+      "target_var": "C^post",
+      "depend_on": [
+        "A^otherPerson",
+        "f^otherPerson"
+      ]
+    },
+    {
+      "vid": "post",
+      "type": "foreach",
+      "expand_eid_list": [],
+      "single_op": "C^post",
+      "multi_ops": [],
+      "target_var": "f^post",
+      "depend_on": [
+        "A^otherPerson",
+        "C^post",
+        "f^otherPerson"
+      ]
+    },
+    {
+      "vid": "otherPost",
+      "type": "intersect",
+      "expand_eid_list": [],
+      "single_op": "A^admin",
+      "multi_ops": [],
+      "target_var": "C^otherPost",
+      "depend_on": [
+        "A^admin",
+        "C^admin",
+        "f^admin"
+      ]
+    },
+    {
+      "vid": "otherPost",
+      "type": "foreach",
+      "expand_eid_list": [],
+      "single_op": "C^otherPost",
+      "multi_ops": [],
+      "target_var": "f^otherPost",
+      "depend_on": [
+        "A^admin",
+        "C^admin",
+        "C^otherPost",
+        "f^admin"
+      ]
+    },
+    {
+      "vid": "otherPost",
+      "type": "report",
+      "expand_eid_list": [],
+      "single_op": "",
+      "multi_ops": [
+        "f^admin",
+        "f^otherPerson",
+        "f^otherPost",
+        "f^person",
+        "f^post"
+      ],
+      "target_var": "f",
+      "depend_on": [
+        "A^admin",
+        "A^otherPerson",
+        "C^admin",
+        "C^otherPost",
+        "C^person",
+        "C^post",
+        "f^admin",
+        "f^otherPerson",
+        "f^otherPost",
+        "f^person",
+        "f^post"
+      ]
+    }
+  ]
+}

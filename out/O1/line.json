@@ -1,70 +1,130 @@
 {
-  "matchingOrder": ["v2", "v1", "v3"],
+  "matchingOrder": [
+    "v2",
+    "v1",
+    "v3"
+  ],
   "vertices": {
-    "v1": ["V1", {}],
-    "v2": ["V2", {}],
-    "v3": ["V3", {}]
+    "v1": [
+      "V1",
+      {}
+    ],
+    "v2": [
+      "V2",
+      {}
+    ],
+    "v3": [
+      "V3",
+      {}
+    ]
   },
   "edges": {
-    "a": ["v1", "v2", "A", {}],
-    "b": ["v2", "v3", "B", {}]
+    "a": [
+      "v1",
+      "v2",
+      "A",
+      {}
+    ],
+    "b": [
+      "v2",
+      "v3",
+      "B",
+      {}
+    ]
   },
   "instructions": [
     {
+      "vid": "v2",
       "type": "init",
+      "expand_eid_list": [],
       "single_op": "",
       "multi_ops": [],
       "target_var": "f^v2",
-      "vid": "v2",
-      "expand_eid_list": []
+      "depend_on": []
     },
     {
+      "vid": "v2",
       "type": "get_adj",
+      "expand_eid_list": [
+        "a",
+        "b"
+      ],
       "single_op": "f^v2",
       "multi_ops": [],
       "target_var": "A^v2",
-      "vid": "v2",
-      "expand_eid_list": ["b", "a"]
+      "depend_on": [
+        "f^v2"
+      ]
     },
     {
+      "vid": "v1",
       "type": "intersect",
+      "expand_eid_list": [],
       "single_op": "A^v2",
       "multi_ops": [],
       "target_var": "C^v1",
-      "vid": "v1",
-      "expand_eid_list": []
+      "depend_on": [
+        "A^v2",
+        "f^v2"
+      ]
     },
     {
+      "vid": "v1",
       "type": "foreach",
+      "expand_eid_list": [],
       "single_op": "C^v1",
       "multi_ops": [],
       "target_var": "f^v1",
-      "vid": "v1",
-      "expand_eid_list": []
+      "depend_on": [
+        "A^v2",
+        "C^v1",
+        "f^v2"
+      ]
     },
     {
+      "vid": "v3",
       "type": "intersect",
+      "expand_eid_list": [],
       "single_op": "A^v2",
       "multi_ops": [],
       "target_var": "C^v3",
-      "vid": "v3",
-      "expand_eid_list": []
+      "depend_on": [
+        "A^v2",
+        "f^v2"
+      ]
     },
     {
+      "vid": "v3",
       "type": "foreach",
+      "expand_eid_list": [],
       "single_op": "C^v3",
       "multi_ops": [],
       "target_var": "f^v3",
-      "vid": "v3",
-      "expand_eid_list": []
+      "depend_on": [
+        "A^v2",
+        "C^v3",
+        "f^v2"
+      ]
     },
     {
-      "type": "report",
-      "single_op": "",
-      "multi_ops": ["f^v3", "f^v1", "f^v2"],
-      "target_var": "f",
       "vid": "v3",
-      "expand_eid_list": []
+      "type": "report",
+      "expand_eid_list": [],
+      "single_op": "",
+      "multi_ops": [
+        "f^v1",
+        "f^v2",
+        "f^v3"
+      ],
+      "target_var": "f",
+      "depend_on": [
+        "A^v2",
+        "C^v1",
+        "C^v3",
+        "f^v1",
+        "f^v2",
+        "f^v3"
+      ]
     }
   ]
 }
