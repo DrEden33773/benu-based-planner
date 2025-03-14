@@ -52,7 +52,7 @@ def to_displayed_instr(exec_instr: ExecInstruction) -> DisplayedInstr:
 
 
 class PlanDict(TypedDict):
-    matchingOrder: list[str]
+    matching_order: list[str]
     vertices: VertexInfoDict
     edges: EdgeInfoDict
     instructions: list[DisplayedInstr]
@@ -69,7 +69,7 @@ class PlanSerializer:
         """生成执行计划的 JSON 文本"""
 
         plan_dict: PlanDict = {
-            "matchingOrder": self.matching_order,
+            "matching_order": self.matching_order,
             "vertices": self.pg.get_all_v_info(),
             "edges": self.pg.get_all_e_info(),
             "instructions": [to_displayed_instr(instr) for instr in self.exec_plan],
