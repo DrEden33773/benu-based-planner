@@ -1,4 +1,4 @@
-6 7 4 0
+6 7 5 0
 
 person Person
 otherPerson Person
@@ -15,6 +15,7 @@ e post otherTag hasTag
 f thirdPerson otherPerson knows
 g otherPerson thirdPerson knows
 
+post trending_score >=15.5
 person id =123
 tag name ='Computer Science'
 otherTag name !='Art'

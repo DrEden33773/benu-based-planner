@@ -14,7 +14,7 @@ type NullableAttrPG = SerializableAttrPG | dict[str, str]
 class SerializableAttrPG(TypedDict):
     attr: str
     op: Op
-    value: int | str
+    value: int | float | str
     type: AttrType
 
 
@@ -35,7 +35,7 @@ def attr_pg_to_serializable(attr_pg: Optional["AttrPG"]) -> NullableAttrPG:
 class AttrPG:
     attr: str
     op: Op
-    r_value: int | str
+    r_value: int | float | str
     r_type: AttrType
 
     def __init__(self, attr: str, raw_pred: str) -> None:
@@ -69,8 +69,14 @@ class AttrPG:
         # Literal
         match raw_pred[cursor]:
             case c if c.isdigit():
-                self.r_value = int(raw_pred[cursor:])
-                self.r_type = AttrType.Int
+                # Check if we have a float (has decimal point) or integer
+                raw_value = raw_pred[cursor:]
+                if "." in raw_value:
+                    self.r_value = float(raw_value)
+                    self.r_type = AttrType.Float
+                else:
+                    self.r_value = int(raw_value)
+                    self.r_type = AttrType.Int
             case c if c == "'" and raw_pred[-1] != "'":
                 raise ParsingPGError("Unclosed string literal (missing `'`).")
             case c if c == '"' and raw_pred[-1] != '"':

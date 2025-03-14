@@ -17,6 +17,7 @@ class Op(StrEnum):
 
 class AttrType(StrEnum):
     Int = "int"
+    Float = "float"
     String = "string"
 
 
