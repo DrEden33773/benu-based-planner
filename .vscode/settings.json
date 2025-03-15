@@ -3,6 +3,7 @@
     "python.analysis.typeCheckingMode": "strict",
     "cSpell.words": [
         "Apriori",
+        "BENU",
         "getadj"
     ]
 }

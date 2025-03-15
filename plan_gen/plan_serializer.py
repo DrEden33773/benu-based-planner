@@ -1,7 +1,7 @@
 import json
-from parser.common import AttrType, Op
 from typing import TypedDict
 
+from parser.common import AttrType, Op
 from plan_gen.exec_instr import ExecInstruction, InstructionType
 from plan_gen.plan_generator import PlanGenerator
 from utils.pattern_graph import EdgeInfoDict, VertexInfoDict

@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+
 from parser.common import Edge
 from parser.pg_parser import AttrPG, SerializableAttrPG, attr_pg_to_serializable
 

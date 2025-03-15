@@ -1,7 +1,7 @@
-from parser.pg_parser import ParserPG, ParsingPGError
 from pathlib import Path
 from sys import stderr
 
+from parser.pg_parser import ParserPG, ParsingPGError
 from plan_gen.plan_generator import PlanGenerator
 
 SCRIPT_DIR = Path(__file__).parent.absolute()

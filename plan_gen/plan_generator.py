@@ -1,6 +1,5 @@
 from parser.common import AttrType, Op
 from parser.pg_parser import ParserPG
-
 from plan_gen.common import VarPrefix
 from plan_gen.exec_instr import ExecInstruction, InstructionType
 from planner_profile import ALLOW_UNI_INTERSECT
@@ -50,7 +49,7 @@ class PlanGenerator:
         with open(file_path, "w") as file:
             file.write(json_plan)
 
-        print(f'  Plan saved to "{file_path.replace('\\', '/')}"')
+        print(f'  Plan saved to "{file_path.replace("\\", "/")}"')
 
     def generate_json_exec_plan(self):
         """生成执行计划的 JSON 文本"""
