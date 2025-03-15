@@ -118,7 +118,7 @@ class PlanGenerator:
                         vid=vid,
                         type=InstructionType.Init,
                         single_op="",
-                        target_var=VarPrefix.IntersectCandidate + vid,
+                        target_var=VarPrefix.EnumerateTarget + vid,
                     )
                 )
             elif len(operands) == 1:
@@ -151,15 +151,16 @@ class PlanGenerator:
                     )
                 )
 
-            # Foreach
-            exec_plan.append(
-                ExecInstruction(
-                    vid=vid,
-                    type=InstructionType.Foreach,
-                    single_op=VarPrefix.IntersectCandidate + vid,
-                    target_var=VarPrefix.EnumerateTarget + vid,
+            # Foreach (只有 operands 非空时才需要, operands 为空 => 前驱指令就是 Init)
+            if operands:
+                exec_plan.append(
+                    ExecInstruction(
+                        vid=vid,
+                        type=InstructionType.Foreach,
+                        single_op=VarPrefix.IntersectCandidate + vid,
+                        target_var=VarPrefix.EnumerateTarget + vid,
+                    )
                 )
-            )
             # GetAdj (加上 `扩展边约束`)
             exec_plan.append(
                 ExecInstruction(

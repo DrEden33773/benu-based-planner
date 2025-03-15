@@ -130,19 +130,8 @@
       "expand_eid_list": [],
       "single_op": "",
       "multi_ops": [],
-      "target_var": "C^admin",
-      "depend_on": []
-    },
-    {
-      "vid": "admin",
-      "type": "foreach",
-      "expand_eid_list": [],
-      "single_op": "C^admin",
-      "multi_ops": [],
       "target_var": "f^admin",
-      "depend_on": [
-        "C^admin"
-      ]
+      "depend_on": []
     },
     {
       "vid": "admin",
@@ -154,7 +143,6 @@
       "multi_ops": [],
       "target_var": "A^admin",
       "depend_on": [
-        "C^admin",
         "f^admin"
       ]
     },
@@ -192,7 +180,6 @@
       "target_var": "C^otherPost",
       "depend_on": [
         "A^admin",
-        "C^admin",
         "f^admin"
       ]
     },
@@ -205,7 +192,6 @@
       "target_var": "f^otherPost",
       "depend_on": [
         "A^admin",
-        "C^admin",
         "C^otherPost",
         "f^admin"
       ]
@@ -226,7 +212,6 @@
       "depend_on": [
         "A^admin",
         "A^otherPerson",
-        "C^admin",
         "C^otherPost",
         "C^person",
         "C^post",

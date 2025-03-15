@@ -106,19 +106,8 @@
       "expand_eid_list": [],
       "single_op": "",
       "multi_ops": [],
-      "target_var": "C^person",
-      "depend_on": []
-    },
-    {
-      "vid": "person",
-      "type": "foreach",
-      "expand_eid_list": [],
-      "single_op": "C^person",
-      "multi_ops": [],
       "target_var": "f^person",
-      "depend_on": [
-        "C^person"
-      ]
+      "depend_on": []
     },
     {
       "vid": "person",
@@ -131,7 +120,6 @@
       "multi_ops": [],
       "target_var": "A^person",
       "depend_on": [
-        "C^person",
         "f^person"
       ]
     },
@@ -198,7 +186,6 @@
       "depend_on": [
         "A^person",
         "A^post",
-        "C^person",
         "f^person",
         "f^post"
       ]
@@ -213,7 +200,6 @@
       "depend_on": [
         "A^person",
         "A^post",
-        "C^person",
         "T^otherPerson",
         "f^person",
         "f^post"
@@ -230,7 +216,6 @@
         "A^person",
         "A^post",
         "C^otherPerson",
-        "C^person",
         "T^otherPerson",
         "f^person",
         "f^post"
@@ -254,7 +239,6 @@
         "A^post",
         "C^otherPerson",
         "C^otherTag",
-        "C^person",
         "C^tag",
         "T^otherPerson",
         "f^otherPerson",
