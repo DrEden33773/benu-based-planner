@@ -28,7 +28,8 @@ class PlanOptimizer:
         self._reorder()
 
         # 4. `三角形` 模式缓存
-        self._triangle_cache()
+        # TODO: 尚未完全实现, 暂时禁用
+        # self._triangle_cache()
 
     def _triangle_cache(self):
         """`三角形` 模式缓存"""
