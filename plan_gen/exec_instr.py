@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import StrEnum, auto
+from typing import Any
 
 from plan_gen.common import STR_TUPLE_SPLITTER, VarPrefix
 
@@ -39,6 +40,48 @@ class InstructionType(StrEnum):
         return self._get_cost_dict()[self] - self._get_cost_dict()[other]
 
 
+class ExecInstrTracker:
+    type_2_input_var_prefix: dict[InstructionType, set[str]] = {}
+    type_2_target_var_prefix: dict[InstructionType, set[str]] = {}
+
+    @classmethod
+    def gather_an_exec_instr(cls, instr: "ExecInstruction"):
+        curr_set = cls.type_2_input_var_prefix.setdefault(instr.type, set())
+        if instr.is_single_op() and (
+            splitted := instr.single_op.split(STR_TUPLE_SPLITTER)
+        ):
+            prefix = splitted[0]
+            curr_set.add(prefix)
+        else:
+            for op in instr.multi_ops:
+                if splitted := op.split(STR_TUPLE_SPLITTER):
+                    prefix = splitted[0]
+                    curr_set.add(prefix)
+
+        curr_set = cls.type_2_target_var_prefix.setdefault(instr.type, set())
+        if splitted := instr.target_var.split(STR_TUPLE_SPLITTER):
+            prefix = splitted[0]
+            curr_set.add(prefix)
+
+    @classmethod
+    def get_statistic_info(cls) -> list[dict[str, Any]]:
+        all_types = (
+            cls.type_2_input_var_prefix.keys() | cls.type_2_target_var_prefix.keys()
+        )
+        return [
+            {
+                "type": type_,
+                "input_var_prefix": sorted(
+                    cls.type_2_input_var_prefix.get(type_, set())
+                ),
+                "target_var_prefix": sorted(
+                    cls.type_2_target_var_prefix.get(type_, set())
+                ),
+            }
+            for type_ in all_types
+        ]
+
+
 @dataclass
 class ExecInstruction:
     type: InstructionType
@@ -61,6 +104,9 @@ class ExecInstruction:
 
     depend_on: list[str] = field(default_factory=list)
     """ 依赖变量 """
+
+    def __post_init__(self):
+        ExecInstrTracker.gather_an_exec_instr(self)
 
     def is_single_op(self) -> bool:
         """是否为 `单输入变量` 操作"""

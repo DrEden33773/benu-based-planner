@@ -1,0 +1,14 @@
+4 4 2 0
+
+person Person
+otherPerson Person
+tag Tag
+post Post
+
+a person otherPerson knows
+b otherPerson person knows
+c post otherPerson hasCreator
+d post tag hasTag
+
+person id =123
+tag name ='Computer Science'

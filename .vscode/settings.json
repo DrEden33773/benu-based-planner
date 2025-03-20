@@ -4,6 +4,9 @@
     "cSpell.words": [
         "Apriori",
         "BENU",
-        "getadj"
+        "getadj",
+        "libsqlite",
+        "pipx",
+        "winget"
     ]
 }

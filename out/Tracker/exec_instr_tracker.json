@@ -1,0 +1,47 @@
+[
+  {
+    "type": "report",
+    "input_var_prefix": [
+      "f"
+    ],
+    "target_var_prefix": [
+      "f"
+    ]
+  },
+  {
+    "type": "init",
+    "input_var_prefix": [],
+    "target_var_prefix": [
+      "f"
+    ]
+  },
+  {
+    "type": "intersect",
+    "input_var_prefix": [
+      "A",
+      "T"
+    ],
+    "target_var_prefix": [
+      "C",
+      "T"
+    ]
+  },
+  {
+    "type": "get_adj",
+    "input_var_prefix": [
+      "f"
+    ],
+    "target_var_prefix": [
+      "A"
+    ]
+  },
+  {
+    "type": "foreach",
+    "input_var_prefix": [
+      "C"
+    ],
+    "target_var_prefix": [
+      "f"
+    ]
+  }
+]
