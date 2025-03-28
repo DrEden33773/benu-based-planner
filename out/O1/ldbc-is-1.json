@@ -3,35 +3,38 @@
     "person",
     "city"
   ],
-  "vertices": {
-    "person": [
-      "Person",
-      {
+  "vertices": [
+    {
+      "vid": "person",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "=",
         "value": 6597069766660,
         "type": "int"
       }
-    ],
-    "city": [
-      "City",
-      {}
-    ]
-  },
-  "edges": {
-    "a": [
-      "person",
-      "city",
-      "isLocatedIn",
-      {}
-    ]
-  },
+    },
+    {
+      "vid": "city",
+      "label": "City",
+      "attr": null
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "person",
+      "dst_vid": "city",
+      "label": "isLocatedIn",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "person",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^person",
       "depend_on": []
@@ -78,7 +81,7 @@
       "vid": "city",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^city",
         "f^person"

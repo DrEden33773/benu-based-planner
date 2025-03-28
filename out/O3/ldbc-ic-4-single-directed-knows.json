@@ -7,91 +7,103 @@
     "otherPost",
     "tag"
   ],
-  "vertices": {
-    "person": [
-      "Person",
-      {
+  "vertices": [
+    {
+      "vid": "person",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "!=",
         "value": 246,
         "type": "int"
       }
-    ],
-    "otherPerson": [
-      "Person",
-      {
+    },
+    {
+      "vid": "otherPerson",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "=",
         "value": 246,
         "type": "int"
       }
-    ],
-    "friend": [
-      "Person",
-      {
+    },
+    {
+      "vid": "friend",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "!=",
         "value": 246,
         "type": "int"
       }
-    ],
-    "post": [
-      "Post",
-      {}
-    ],
-    "otherPost": [
-      "Post",
-      {}
-    ],
-    "tag": [
-      "Tag",
-      {}
-    ]
-  },
-  "edges": {
-    "a": [
-      "person",
-      "otherPerson",
-      "knows",
-      {}
-    ],
-    "b": [
-      "friend",
-      "otherPerson",
-      "knows",
-      {}
-    ],
-    "c": [
-      "post",
-      "person",
-      "hasCreator",
-      {}
-    ],
-    "d": [
-      "otherPost",
-      "friend",
-      "hasCreator",
-      {}
-    ],
-    "e": [
-      "post",
-      "tag",
-      "hasTag",
-      {}
-    ],
-    "f": [
-      "otherPost",
-      "tag",
-      "hasTag",
-      {}
-    ]
-  },
+    },
+    {
+      "vid": "post",
+      "label": "Post",
+      "attr": null
+    },
+    {
+      "vid": "otherPost",
+      "label": "Post",
+      "attr": null
+    },
+    {
+      "vid": "tag",
+      "label": "Tag",
+      "attr": null
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "person",
+      "dst_vid": "otherPerson",
+      "label": "knows",
+      "attr": null
+    },
+    {
+      "eid": "b",
+      "src_vid": "friend",
+      "dst_vid": "otherPerson",
+      "label": "knows",
+      "attr": null
+    },
+    {
+      "eid": "c",
+      "src_vid": "post",
+      "dst_vid": "person",
+      "label": "hasCreator",
+      "attr": null
+    },
+    {
+      "eid": "d",
+      "src_vid": "otherPost",
+      "dst_vid": "friend",
+      "label": "hasCreator",
+      "attr": null
+    },
+    {
+      "eid": "e",
+      "src_vid": "post",
+      "dst_vid": "tag",
+      "label": "hasTag",
+      "attr": null
+    },
+    {
+      "eid": "f",
+      "src_vid": "otherPost",
+      "dst_vid": "tag",
+      "label": "hasTag",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "person",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^person",
       "depend_on": []
@@ -309,7 +321,7 @@
       "vid": "tag",
       "type": "intersect",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "A^otherPost",
         "A^post"
@@ -387,7 +399,7 @@
       "vid": "tag",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^friend",
         "f^otherPerson",

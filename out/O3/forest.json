@@ -5,50 +5,57 @@
     "green",
     "otherRed"
   ],
-  "vertices": {
-    "red": [
-      "Red",
-      {}
-    ],
-    "blue": [
-      "Blue",
-      {}
-    ],
-    "green": [
-      "Green",
-      {}
-    ],
-    "otherRed": [
-      "Red",
-      {}
-    ]
-  },
-  "edges": {
-    "a": [
-      "red",
-      "blue",
-      "Edge",
-      {}
-    ],
-    "b": [
-      "blue",
-      "green",
-      "Edge",
-      {}
-    ],
-    "c": [
-      "green",
-      "red",
-      "Edge",
-      {}
-    ]
-  },
+  "vertices": [
+    {
+      "vid": "red",
+      "label": "Red",
+      "attr": null
+    },
+    {
+      "vid": "blue",
+      "label": "Blue",
+      "attr": null
+    },
+    {
+      "vid": "green",
+      "label": "Green",
+      "attr": null
+    },
+    {
+      "vid": "otherRed",
+      "label": "Red",
+      "attr": null
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "red",
+      "dst_vid": "blue",
+      "label": "Edge",
+      "attr": null
+    },
+    {
+      "eid": "b",
+      "src_vid": "blue",
+      "dst_vid": "green",
+      "label": "Edge",
+      "attr": null
+    },
+    {
+      "eid": "c",
+      "src_vid": "green",
+      "dst_vid": "red",
+      "label": "Edge",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "red",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^red",
       "depend_on": []
@@ -113,7 +120,7 @@
       "vid": "green",
       "type": "intersect",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "A^blue",
         "A^red"
@@ -164,7 +171,7 @@
       "vid": "otherRed",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^otherRed",
       "depend_on": []
@@ -173,7 +180,7 @@
       "vid": "otherRed",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^blue",
         "f^green",

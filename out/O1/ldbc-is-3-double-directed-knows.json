@@ -3,46 +3,50 @@
     "person",
     "friend"
   ],
-  "vertices": {
-    "person": [
-      "Person",
-      {
+  "vertices": [
+    {
+      "vid": "person",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "=",
         "value": 6597069766660,
         "type": "int"
       }
-    ],
-    "friend": [
-      "Person",
-      {
+    },
+    {
+      "vid": "friend",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "!=",
         "value": 6597069766660,
         "type": "int"
       }
-    ]
-  },
-  "edges": {
-    "a": [
-      "person",
-      "friend",
-      "knows",
-      {}
-    ],
-    "b": [
-      "friend",
-      "person",
-      "knows",
-      {}
-    ]
-  },
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "person",
+      "dst_vid": "friend",
+      "label": "knows",
+      "attr": null
+    },
+    {
+      "eid": "b",
+      "src_vid": "friend",
+      "dst_vid": "person",
+      "label": "knows",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "person",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^person",
       "depend_on": []
@@ -90,7 +94,7 @@
       "vid": "friend",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^friend",
         "f^person"

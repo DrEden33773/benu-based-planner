@@ -6,66 +6,76 @@
     "tag",
     "otherTag"
   ],
-  "vertices": {
-    "person": [
-      "Person",
-      {}
-    ],
-    "otherPerson": [
-      "Person",
-      {}
-    ],
-    "tag": [
-      "Tag",
-      {}
-    ],
-    "otherTag": [
-      "Tag",
-      {}
-    ],
-    "post": [
-      "Post",
-      {}
-    ]
-  },
-  "edges": {
-    "a": [
-      "person",
-      "otherPerson",
-      "knows",
-      {}
-    ],
-    "b": [
-      "otherPerson",
-      "person",
-      "knows",
-      {}
-    ],
-    "c": [
-      "post",
-      "otherPerson",
-      "hasCreator",
-      {}
-    ],
-    "d": [
-      "post",
-      "tag",
-      "hasTag",
-      {}
-    ],
-    "e": [
-      "post",
-      "otherTag",
-      "hasTag",
-      {}
-    ]
-  },
+  "vertices": [
+    {
+      "vid": "person",
+      "label": "Person",
+      "attr": null
+    },
+    {
+      "vid": "otherPerson",
+      "label": "Person",
+      "attr": null
+    },
+    {
+      "vid": "tag",
+      "label": "Tag",
+      "attr": null
+    },
+    {
+      "vid": "otherTag",
+      "label": "Tag",
+      "attr": null
+    },
+    {
+      "vid": "post",
+      "label": "Post",
+      "attr": null
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "person",
+      "dst_vid": "otherPerson",
+      "label": "knows",
+      "attr": null
+    },
+    {
+      "eid": "b",
+      "src_vid": "otherPerson",
+      "dst_vid": "person",
+      "label": "knows",
+      "attr": null
+    },
+    {
+      "eid": "c",
+      "src_vid": "post",
+      "dst_vid": "otherPerson",
+      "label": "hasCreator",
+      "attr": null
+    },
+    {
+      "eid": "d",
+      "src_vid": "post",
+      "dst_vid": "tag",
+      "label": "hasTag",
+      "attr": null
+    },
+    {
+      "eid": "e",
+      "src_vid": "post",
+      "dst_vid": "otherTag",
+      "label": "hasTag",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "post",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^post",
       "depend_on": []
@@ -213,7 +223,7 @@
       "vid": "otherTag",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^otherPerson",
         "f^otherTag",

@@ -8,90 +8,103 @@
     "companyCountry",
     "universityCity"
   ],
-  "vertices": {
-    "person": [
-      "Person",
-      {
+  "vertices": [
+    {
+      "vid": "person",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "=",
         "value": 6597069766786,
         "type": "int"
       }
-    ],
-    "otherPerson": [
-      "Person",
-      {
+    },
+    {
+      "vid": "otherPerson",
+      "label": "Person",
+      "attr": {
         "attr": "firstName",
         "op": "=",
         "value": "Jose",
         "type": "string"
       }
-    ],
-    "locationCity": [
-      "City",
-      {}
-    ],
-    "company": [
-      "Company",
-      {}
-    ],
-    "university": [
-      "University",
-      {}
-    ],
-    "companyCountry": [
-      "Country",
-      {}
-    ],
-    "universityCity": [
-      "City",
-      {}
-    ]
-  },
-  "edges": {
-    "a": [
-      "person",
-      "otherPerson",
-      "knows",
-      {}
-    ],
-    "b": [
-      "otherPerson",
-      "locationCity",
-      "isLocatedIn",
-      {}
-    ],
-    "c": [
-      "otherPerson",
-      "company",
-      "workAt",
-      {}
-    ],
-    "d": [
-      "otherPerson",
-      "university",
-      "studyAt",
-      {}
-    ],
-    "e": [
-      "company",
-      "companyCountry",
-      "isLocatedIn",
-      {}
-    ],
-    "f": [
-      "university",
-      "universityCity",
-      "isLocatedIn",
-      {}
-    ]
-  },
+    },
+    {
+      "vid": "locationCity",
+      "label": "City",
+      "attr": null
+    },
+    {
+      "vid": "company",
+      "label": "Company",
+      "attr": null
+    },
+    {
+      "vid": "university",
+      "label": "University",
+      "attr": null
+    },
+    {
+      "vid": "companyCountry",
+      "label": "Country",
+      "attr": null
+    },
+    {
+      "vid": "universityCity",
+      "label": "City",
+      "attr": null
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "person",
+      "dst_vid": "otherPerson",
+      "label": "knows",
+      "attr": null
+    },
+    {
+      "eid": "b",
+      "src_vid": "otherPerson",
+      "dst_vid": "locationCity",
+      "label": "isLocatedIn",
+      "attr": null
+    },
+    {
+      "eid": "c",
+      "src_vid": "otherPerson",
+      "dst_vid": "company",
+      "label": "workAt",
+      "attr": null
+    },
+    {
+      "eid": "d",
+      "src_vid": "otherPerson",
+      "dst_vid": "university",
+      "label": "studyAt",
+      "attr": null
+    },
+    {
+      "eid": "e",
+      "src_vid": "company",
+      "dst_vid": "companyCountry",
+      "label": "isLocatedIn",
+      "attr": null
+    },
+    {
+      "eid": "f",
+      "src_vid": "university",
+      "dst_vid": "universityCity",
+      "label": "isLocatedIn",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "otherPerson",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^otherPerson",
       "depend_on": []
@@ -312,7 +325,7 @@
       "vid": "universityCity",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^company",
         "f^companyCountry",

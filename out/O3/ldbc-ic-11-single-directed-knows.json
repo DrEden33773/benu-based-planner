@@ -5,65 +5,72 @@
     "otherPerson",
     "company"
   ],
-  "vertices": {
-    "person": [
-      "Person",
-      {
+  "vertices": [
+    {
+      "vid": "person",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "=",
         "value": 6597069766786,
         "type": "int"
       }
-    ],
-    "otherPerson": [
-      "Person",
-      {
+    },
+    {
+      "vid": "otherPerson",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": ">",
         "value": 10995116277900,
         "type": "int"
       }
-    ],
-    "company": [
-      "Company",
-      {}
-    ],
-    "country": [
-      "Country",
-      {
+    },
+    {
+      "vid": "company",
+      "label": "Company",
+      "attr": null
+    },
+    {
+      "vid": "country",
+      "label": "Country",
+      "attr": {
         "attr": "name",
         "op": "=",
         "value": "Pakistan",
         "type": "string"
       }
-    ]
-  },
-  "edges": {
-    "a": [
-      "person",
-      "otherPerson",
-      "knows",
-      {}
-    ],
-    "b": [
-      "otherPerson",
-      "company",
-      "workAt",
-      {}
-    ],
-    "c": [
-      "company",
-      "country",
-      "isLocatedIn",
-      {}
-    ]
-  },
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "person",
+      "dst_vid": "otherPerson",
+      "label": "knows",
+      "attr": null
+    },
+    {
+      "eid": "b",
+      "src_vid": "otherPerson",
+      "dst_vid": "company",
+      "label": "workAt",
+      "attr": null
+    },
+    {
+      "eid": "c",
+      "src_vid": "company",
+      "dst_vid": "country",
+      "label": "isLocatedIn",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "person",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^person",
       "depend_on": []
@@ -85,7 +92,7 @@
       "vid": "country",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^country",
       "depend_on": []
@@ -149,7 +156,7 @@
       "vid": "company",
       "type": "intersect",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "A^country",
         "A^otherPerson"
@@ -206,7 +213,7 @@
       "vid": "company",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^company",
         "f^country",

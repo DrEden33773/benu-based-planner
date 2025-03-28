@@ -84,7 +84,7 @@ class PlanGenerator:
             ExecInstruction(
                 vid=vid,
                 type=InstructionType.Init,
-                single_op="",
+                single_op=None,
                 target_var=VarPrefix.EnumerateTarget + vid,
             )
         )
@@ -117,7 +117,7 @@ class PlanGenerator:
                     ExecInstruction(
                         vid=vid,
                         type=InstructionType.Init,
-                        single_op="",
+                        single_op=None,
                         target_var=VarPrefix.EnumerateTarget + vid,
                     )
                 )
@@ -198,7 +198,7 @@ class PlanGenerator:
 
         for instr in exec_plan:
             depend_set = set[str]()
-            if instr.is_single_op():
+            if instr.single_op:
                 op = instr.single_op
                 if op != VarPrefix.DataVertexSet:
                     depend_set.add(op)
@@ -216,7 +216,7 @@ class PlanGenerator:
         """移除未使用的 DBQ (GetAdj) 操作"""
         depend_set = set[str]()
         for instr in exec_plan:
-            if instr.is_single_op():
+            if instr.single_op:
                 depend_set.add(instr.single_op)
             else:
                 depend_set.update(instr.multi_ops)
@@ -249,7 +249,7 @@ class PlanGenerator:
                 new_exec_plan.append(instr)
                 continue
 
-            if instr.type == InstructionType.Intersect and instr.is_single_op():
+            if instr.type == InstructionType.Intersect and instr.single_op:
                 if not ALLOW_UNI_INTERSECT and instr.target_var.startswith(
                     VarPrefix.IntersectTarget
                 ):

@@ -3,7 +3,7 @@ from typing import Optional, TypedDict
 
 from plan_gen.exec_instr import ExecInstruction, InstructionType
 from plan_gen.plan_generator import PlanGenerator
-from utils.pattern_graph import EdgeInfoDict, VertexInfoDict
+from utils.pattern_graph import EInfo, VInfo
 
 
 class DisplayedInstr(TypedDict):
@@ -31,8 +31,8 @@ def to_displayed_instr(exec_instr: ExecInstruction) -> DisplayedInstr:
 
 class PlanDict(TypedDict):
     matching_order: list[str]
-    vertices: VertexInfoDict
-    edges: EdgeInfoDict
+    vertices: list[VInfo]
+    edges: list[EInfo]
     instructions: list[DisplayedInstr]
 
 

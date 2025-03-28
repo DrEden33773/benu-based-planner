@@ -4,40 +4,45 @@
     "v1",
     "v3"
   ],
-  "vertices": {
-    "v1": [
-      "V1",
-      {}
-    ],
-    "v2": [
-      "V2",
-      {}
-    ],
-    "v3": [
-      "V3",
-      {}
-    ]
-  },
-  "edges": {
-    "a": [
-      "v1",
-      "v2",
-      "A",
-      {}
-    ],
-    "b": [
-      "v2",
-      "v3",
-      "B",
-      {}
-    ]
-  },
+  "vertices": [
+    {
+      "vid": "v1",
+      "label": "V1",
+      "attr": null
+    },
+    {
+      "vid": "v2",
+      "label": "V2",
+      "attr": null
+    },
+    {
+      "vid": "v3",
+      "label": "V3",
+      "attr": null
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "v1",
+      "dst_vid": "v2",
+      "label": "A",
+      "attr": null
+    },
+    {
+      "eid": "b",
+      "src_vid": "v2",
+      "dst_vid": "v3",
+      "label": "B",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "v2",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^v2",
       "depend_on": []
@@ -110,7 +115,7 @@
       "vid": "v3",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^v1",
         "f^v2",

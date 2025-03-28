@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 from enum import StrEnum, auto
-from typing import Any
+from typing import Any, Optional
 
 from plan_gen.common import STR_TUPLE_SPLITTER, VarPrefix
 
@@ -47,9 +47,7 @@ class ExecInstrTracker:
     @classmethod
     def gather_an_exec_instr(cls, instr: "ExecInstruction"):
         curr_set = cls.type_2_input_var_prefix.setdefault(instr.type, set())
-        if instr.is_single_op() and (
-            splitted := instr.single_op.split(STR_TUPLE_SPLITTER)
-        ):
+        if instr.single_op and (splitted := instr.single_op.split(STR_TUPLE_SPLITTER)):
             prefix = splitted[0]
             curr_set.add(prefix)
         else:
@@ -96,7 +94,7 @@ class ExecInstruction:
     extend_eid_list: list[str] = field(default_factory=list)
     """ 模式图扩展边 eid 列表 """
 
-    single_op: str = ""
+    single_op: Optional[str] = None
     """ 输入变量 (单个) """
 
     multi_ops: list[str] = field(default_factory=list)

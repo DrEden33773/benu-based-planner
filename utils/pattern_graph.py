@@ -1,19 +1,24 @@
 from dataclasses import dataclass, field
-from typing import Optional
+from typing import Optional, TypedDict
 
 from parser.common import Edge
 from parser.pg_parser import AttrPG, SerializableAttrPG, attr_pg_to_serializable
 
 type AttrInfo = Optional[SerializableAttrPG]
 
-type VertexInfo = tuple[str, AttrInfo]
-""" ### 标签, (属性) """
-type EdgeInfo = tuple[str, str, str, AttrInfo]
-""" ### 起点 vid, 终点 vid, 标签, (属性) """
+
+class VInfo(TypedDict):
+    vid: str
+    label: str
+    attr: AttrInfo
 
 
-type VertexInfoDict = dict[str, VertexInfo]
-type EdgeInfoDict = dict[str, EdgeInfo]
+class EInfo(TypedDict):
+    eid: str
+    label: str
+    src_vid: str
+    dst_vid: str
+    attr: AttrInfo
 
 
 @dataclass
@@ -98,7 +103,7 @@ class PatternGraph:
 
         return self.v_labels.keys()
 
-    def get_v_info(self, vid: str) -> VertexInfo:
+    def get_v_info(self, vid: str) -> VInfo:
         """
         获取顶点 vid 的:
 
@@ -106,9 +111,14 @@ class PatternGraph:
         - 属性
         """
 
-        return self.v_labels[vid], attr_pg_to_serializable(self.v_attrs.get(vid))
+        # return self.v_labels[vid], attr_pg_to_serializable(self.v_attrs.get(vid))
+        return {
+            "vid": vid,
+            "label": self.v_labels[vid],
+            "attr": attr_pg_to_serializable(self.v_attrs.get(vid)),
+        }
 
-    def get_all_v_info(self) -> VertexInfoDict:
+    def get_all_v_info(self) -> list[VInfo]:
         """
         获取所有顶点的:
 
@@ -117,9 +127,10 @@ class PatternGraph:
         - 属性
         """
 
-        return {vid: self.get_v_info(vid) for vid in self.v_labels}
+        # return {vid: self.get_v_info(vid) for vid in self.v_labels}
+        return [self.get_v_info(vid) for vid in self.v_labels]
 
-    def get_e_info(self, edge: Edge) -> EdgeInfo:
+    def get_e_info(self, edge: Edge) -> EInfo:
         """
         获取边 edge 的:
 
@@ -129,14 +140,21 @@ class PatternGraph:
         - 属性
         """
 
-        return (
-            edge.from_vid,
-            edge.to_vid,
-            self.e_labels[edge],
-            attr_pg_to_serializable(self.e_attrs.get(edge.eid)),
-        )
+        # return (
+        #     edge.from_vid,
+        #     edge.to_vid,
+        #     self.e_labels[edge],
+        #     attr_pg_to_serializable(self.e_attrs.get(edge.eid)),
+        # )
+        return {
+            "eid": edge.eid,
+            "src_vid": edge.from_vid,
+            "dst_vid": edge.to_vid,
+            "label": self.e_labels[edge],
+            "attr": attr_pg_to_serializable(self.e_attrs.get(edge.eid)),
+        }
 
-    def get_adj_e_info(self, vid: str) -> EdgeInfoDict:
+    def get_adj_e_info(self, vid: str) -> list[EInfo]:
         """
         获取顶点 vid 所有邻接边的:
 
@@ -149,9 +167,10 @@ class PatternGraph:
         (邻接边 `不限制` 方向)
         """
 
-        return {edge.eid: self.get_e_info(edge) for edge in self.get_adj_e(vid)}
+        # return {edge.eid: self.get_e_info(edge) for edge in self.get_adj_e(vid)}
+        return [self.get_e_info(edge) for edge in self.get_adj_e(vid)]
 
-    def get_all_e_info(self) -> EdgeInfoDict:
+    def get_all_e_info(self) -> list[EInfo]:
         """
         获取所有边的:
 
@@ -162,4 +181,5 @@ class PatternGraph:
         - 属性
         """
 
-        return {edge.eid: self.get_e_info(edge) for edge in self.e_labels}
+        # return {edge.eid: self.get_e_info(edge) for edge in self.e_labels}
+        return [self.get_e_info(edge) for edge in self.e_labels]

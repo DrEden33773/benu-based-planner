@@ -5,66 +5,74 @@
     "forum",
     "post"
   ],
-  "vertices": {
-    "person": [
-      "Person",
-      {
+  "vertices": [
+    {
+      "vid": "person",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "=",
         "value": 94,
         "type": "int"
       }
-    ],
-    "otherPerson": [
-      "Person",
-      {
+    },
+    {
+      "vid": "otherPerson",
+      "label": "Person",
+      "attr": {
         "attr": "id",
         "op": "!=",
         "value": 94,
         "type": "int"
       }
-    ],
-    "forum": [
-      "Forum",
-      {}
-    ],
-    "post": [
-      "Post",
-      {}
-    ]
-  },
-  "edges": {
-    "a": [
-      "person",
-      "otherPerson",
-      "knows",
-      {}
-    ],
-    "b": [
-      "forum",
-      "otherPerson",
-      "hasMember",
-      {}
-    ],
-    "c": [
-      "forum",
-      "post",
-      "containerOf",
-      {}
-    ],
-    "d": [
-      "post",
-      "otherPerson",
-      "hasCreator",
-      {}
-    ]
-  },
+    },
+    {
+      "vid": "forum",
+      "label": "Forum",
+      "attr": null
+    },
+    {
+      "vid": "post",
+      "label": "Post",
+      "attr": null
+    }
+  ],
+  "edges": [
+    {
+      "eid": "a",
+      "src_vid": "person",
+      "dst_vid": "otherPerson",
+      "label": "knows",
+      "attr": null
+    },
+    {
+      "eid": "b",
+      "src_vid": "forum",
+      "dst_vid": "otherPerson",
+      "label": "hasMember",
+      "attr": null
+    },
+    {
+      "eid": "c",
+      "src_vid": "forum",
+      "dst_vid": "post",
+      "label": "containerOf",
+      "attr": null
+    },
+    {
+      "eid": "d",
+      "src_vid": "post",
+      "dst_vid": "otherPerson",
+      "label": "hasCreator",
+      "attr": null
+    }
+  ],
   "instructions": [
     {
       "vid": "otherPerson",
       "type": "init",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [],
       "target_var": "f^otherPerson",
       "depend_on": []
@@ -155,7 +163,7 @@
       "vid": "post",
       "type": "intersect",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "A^forum",
         "A^otherPerson"
@@ -206,7 +214,7 @@
       "vid": "post",
       "type": "report",
       "expand_eid_list": [],
-      "single_op": "",
+      "single_op": null,
       "multi_ops": [
         "f^forum",
         "f^otherPerson",
