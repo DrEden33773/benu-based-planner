@@ -3,8 +3,8 @@
     "person",
     "city"
   ],
-  "vertices": [
-    {
+  "vertices": {
+    "person": {
       "vid": "person",
       "label": "Person",
       "attr": {
@@ -14,21 +14,21 @@
         "type": "int"
       }
     },
-    {
+    "city": {
       "vid": "city",
       "label": "City",
       "attr": null
     }
-  ],
-  "edges": [
-    {
+  },
+  "edges": {
+    "a": {
       "eid": "a",
       "src_vid": "person",
       "dst_vid": "city",
       "label": "isLocatedIn",
       "attr": null
     }
-  ],
+  },
   "instructions": [
     {
       "vid": "person",

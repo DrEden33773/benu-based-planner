@@ -4,39 +4,39 @@
     "v1",
     "v3"
   ],
-  "vertices": [
-    {
+  "vertices": {
+    "v1": {
       "vid": "v1",
       "label": "V1",
       "attr": null
     },
-    {
+    "v2": {
       "vid": "v2",
       "label": "V2",
       "attr": null
     },
-    {
+    "v3": {
       "vid": "v3",
       "label": "V3",
       "attr": null
     }
-  ],
-  "edges": [
-    {
+  },
+  "edges": {
+    "a": {
       "eid": "a",
       "src_vid": "v1",
       "dst_vid": "v2",
       "label": "A",
       "attr": null
     },
-    {
+    "b": {
       "eid": "b",
       "src_vid": "v2",
       "dst_vid": "v3",
       "label": "B",
       "attr": null
     }
-  ],
+  },
   "instructions": [
     {
       "vid": "v2",

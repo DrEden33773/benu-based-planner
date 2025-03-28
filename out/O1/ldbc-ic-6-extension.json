@@ -7,8 +7,8 @@
     "tag",
     "otherTag"
   ],
-  "vertices": [
-    {
+  "vertices": {
+    "person": {
       "vid": "person",
       "label": "Person",
       "attr": {
@@ -18,12 +18,12 @@
         "type": "int"
       }
     },
-    {
+    "otherPerson": {
       "vid": "otherPerson",
       "label": "Person",
       "attr": null
     },
-    {
+    "thirdPerson": {
       "vid": "thirdPerson",
       "label": "Person",
       "attr": {
@@ -33,7 +33,7 @@
         "type": "int"
       }
     },
-    {
+    "tag": {
       "vid": "tag",
       "label": "Tag",
       "attr": {
@@ -43,7 +43,7 @@
         "type": "string"
       }
     },
-    {
+    "otherTag": {
       "vid": "otherTag",
       "label": "Tag",
       "attr": {
@@ -53,7 +53,7 @@
         "type": "string"
       }
     },
-    {
+    "post": {
       "vid": "post",
       "label": "Post",
       "attr": {
@@ -63,58 +63,58 @@
         "type": "float"
       }
     }
-  ],
-  "edges": [
-    {
+  },
+  "edges": {
+    "a": {
       "eid": "a",
       "src_vid": "person",
       "dst_vid": "otherPerson",
       "label": "knows",
       "attr": null
     },
-    {
+    "b": {
       "eid": "b",
       "src_vid": "otherPerson",
       "dst_vid": "person",
       "label": "knows",
       "attr": null
     },
-    {
+    "c": {
       "eid": "c",
       "src_vid": "post",
       "dst_vid": "otherPerson",
       "label": "hasCreator",
       "attr": null
     },
-    {
+    "d": {
       "eid": "d",
       "src_vid": "post",
       "dst_vid": "tag",
       "label": "hasTag",
       "attr": null
     },
-    {
+    "e": {
       "eid": "e",
       "src_vid": "post",
       "dst_vid": "otherTag",
       "label": "hasTag",
       "attr": null
     },
-    {
+    "f": {
       "eid": "f",
       "src_vid": "thirdPerson",
       "dst_vid": "otherPerson",
       "label": "knows",
       "attr": null
     },
-    {
+    "g": {
       "eid": "g",
       "src_vid": "otherPerson",
       "dst_vid": "thirdPerson",
       "label": "knows",
       "attr": null
     }
-  ],
+  },
   "instructions": [
     {
       "vid": "post",

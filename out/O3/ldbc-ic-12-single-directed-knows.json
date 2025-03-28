@@ -8,8 +8,8 @@
     "tag",
     "tagClass"
   ],
-  "vertices": [
-    {
+  "vertices": {
+    "person": {
       "vid": "person",
       "label": "Person",
       "attr": {
@@ -19,7 +19,7 @@
         "type": "int"
       }
     },
-    {
+    "friend": {
       "vid": "friend",
       "label": "Person",
       "attr": {
@@ -29,27 +29,27 @@
         "type": "int"
       }
     },
-    {
+    "comment": {
       "vid": "comment",
       "label": "Comment",
       "attr": null
     },
-    {
+    "post": {
       "vid": "post",
       "label": "Post",
       "attr": null
     },
-    {
+    "tag": {
       "vid": "tag",
       "label": "Tag",
       "attr": null
     },
-    {
+    "tagClass": {
       "vid": "tagClass",
       "label": "Tagclass",
       "attr": null
     },
-    {
+    "otherTagClass": {
       "vid": "otherTagClass",
       "label": "Tagclass",
       "attr": {
@@ -59,51 +59,51 @@
         "type": "string"
       }
     }
-  ],
-  "edges": [
-    {
+  },
+  "edges": {
+    "a": {
       "eid": "a",
       "src_vid": "person",
       "dst_vid": "friend",
       "label": "knows",
       "attr": null
     },
-    {
+    "b": {
       "eid": "b",
       "src_vid": "comment",
       "dst_vid": "friend",
       "label": "hasCreator",
       "attr": null
     },
-    {
+    "c": {
       "eid": "c",
       "src_vid": "comment",
       "dst_vid": "post",
       "label": "replyOf",
       "attr": null
     },
-    {
+    "d": {
       "eid": "d",
       "src_vid": "post",
       "dst_vid": "tag",
       "label": "hasTag",
       "attr": null
     },
-    {
+    "e": {
       "eid": "e",
       "src_vid": "tag",
       "dst_vid": "tagClass",
       "label": "hasType",
       "attr": null
     },
-    {
+    "f": {
       "eid": "f",
       "src_vid": "tagClass",
       "dst_vid": "otherTagClass",
       "label": "isSubclassOf",
       "attr": null
     }
-  ],
+  },
   "instructions": [
     {
       "vid": "friend",

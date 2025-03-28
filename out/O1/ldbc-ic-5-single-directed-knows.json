@@ -5,8 +5,8 @@
     "forum",
     "post"
   ],
-  "vertices": [
-    {
+  "vertices": {
+    "person": {
       "vid": "person",
       "label": "Person",
       "attr": {
@@ -16,7 +16,7 @@
         "type": "int"
       }
     },
-    {
+    "otherPerson": {
       "vid": "otherPerson",
       "label": "Person",
       "attr": {
@@ -26,47 +26,47 @@
         "type": "int"
       }
     },
-    {
+    "forum": {
       "vid": "forum",
       "label": "Forum",
       "attr": null
     },
-    {
+    "post": {
       "vid": "post",
       "label": "Post",
       "attr": null
     }
-  ],
-  "edges": [
-    {
+  },
+  "edges": {
+    "a": {
       "eid": "a",
       "src_vid": "person",
       "dst_vid": "otherPerson",
       "label": "knows",
       "attr": null
     },
-    {
+    "b": {
       "eid": "b",
       "src_vid": "forum",
       "dst_vid": "otherPerson",
       "label": "hasMember",
       "attr": null
     },
-    {
+    "c": {
       "eid": "c",
       "src_vid": "forum",
       "dst_vid": "post",
       "label": "containerOf",
       "attr": null
     },
-    {
+    "d": {
       "eid": "d",
       "src_vid": "post",
       "dst_vid": "otherPerson",
       "label": "hasCreator",
       "attr": null
     }
-  ],
+  },
   "instructions": [
     {
       "vid": "otherPerson",

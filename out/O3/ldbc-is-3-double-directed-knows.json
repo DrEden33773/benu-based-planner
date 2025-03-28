@@ -3,8 +3,8 @@
     "person",
     "friend"
   ],
-  "vertices": [
-    {
+  "vertices": {
+    "person": {
       "vid": "person",
       "label": "Person",
       "attr": {
@@ -14,7 +14,7 @@
         "type": "int"
       }
     },
-    {
+    "friend": {
       "vid": "friend",
       "label": "Person",
       "attr": {
@@ -24,23 +24,23 @@
         "type": "int"
       }
     }
-  ],
-  "edges": [
-    {
+  },
+  "edges": {
+    "a": {
       "eid": "a",
       "src_vid": "person",
       "dst_vid": "friend",
       "label": "knows",
       "attr": null
     },
-    {
+    "b": {
       "eid": "b",
       "src_vid": "friend",
       "dst_vid": "person",
       "label": "knows",
       "attr": null
     }
-  ],
+  },
   "instructions": [
     {
       "vid": "person",

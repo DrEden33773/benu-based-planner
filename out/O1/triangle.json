@@ -4,46 +4,46 @@
     "blue",
     "green"
   ],
-  "vertices": [
-    {
+  "vertices": {
+    "red": {
       "vid": "red",
       "label": "Red",
       "attr": null
     },
-    {
+    "blue": {
       "vid": "blue",
       "label": "Blue",
       "attr": null
     },
-    {
+    "green": {
       "vid": "green",
       "label": "Green",
       "attr": null
     }
-  ],
-  "edges": [
-    {
+  },
+  "edges": {
+    "a": {
       "eid": "a",
       "src_vid": "red",
       "dst_vid": "blue",
       "label": "Edge",
       "attr": null
     },
-    {
+    "b": {
       "eid": "b",
       "src_vid": "blue",
       "dst_vid": "green",
       "label": "Edge",
       "attr": null
     },
-    {
+    "c": {
       "eid": "c",
       "src_vid": "green",
       "dst_vid": "red",
       "label": "Edge",
       "attr": null
     }
-  ],
+  },
   "instructions": [
     {
       "vid": "red",
