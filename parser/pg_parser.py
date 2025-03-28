@@ -5,10 +5,11 @@
 """
 
 from functools import lru_cache
-from parser.common import AttrType, Edge, Op, ParsingPGError
 from typing import Optional, TypedDict
 
-type NullableAttrPG = SerializableAttrPG | dict[str, str]
+from parser.common import AttrType, Edge, Op, ParsingPGError
+
+type NullableAttrPG = Optional[SerializableAttrPG]
 
 
 class SerializableAttrPG(TypedDict):
@@ -28,7 +29,7 @@ def attr_pg_to_serializable(attr_pg: Optional["AttrPG"]) -> NullableAttrPG:
             "type": attr_pg.r_type,
         }
         if attr_pg
-        else {}
+        else None
     )
 
 

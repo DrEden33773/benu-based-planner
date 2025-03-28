@@ -1,18 +1,11 @@
 [
   {
-    "type": "report",
+    "type": "get_adj",
     "input_var_prefix": [
       "f"
     ],
     "target_var_prefix": [
-      "f"
-    ]
-  },
-  {
-    "type": "init",
-    "input_var_prefix": [],
-    "target_var_prefix": [
-      "f"
+      "A"
     ]
   },
   {
@@ -27,19 +20,26 @@
     ]
   },
   {
-    "type": "get_adj",
-    "input_var_prefix": [
-      "f"
-    ],
-    "target_var_prefix": [
-      "A"
-    ]
-  },
-  {
     "type": "foreach",
     "input_var_prefix": [
       "C"
     ],
+    "target_var_prefix": [
+      "f"
+    ]
+  },
+  {
+    "type": "report",
+    "input_var_prefix": [
+      "f"
+    ],
+    "target_var_prefix": [
+      "f"
+    ]
+  },
+  {
+    "type": "init",
+    "input_var_prefix": [],
     "target_var_prefix": [
       "f"
     ]

@@ -1,0 +1,13 @@
+5 5 0 0
+
+person Person
+otherPerson Person
+tag Tag
+otherTag Tag
+post Post
+
+a person otherPerson knows
+b otherPerson person knows
+c post otherPerson hasCreator
+d post tag hasTag
+e post otherTag hasTag

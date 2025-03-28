@@ -1,38 +1,16 @@
 import json
-from typing import TypedDict
+from typing import Optional, TypedDict
 
-from parser.common import AttrType, Op
 from plan_gen.exec_instr import ExecInstruction, InstructionType
 from plan_gen.plan_generator import PlanGenerator
 from utils.pattern_graph import EdgeInfoDict, VertexInfoDict
-
-
-class Attr(TypedDict):
-    attr: str
-    op: Op
-    value: int | str
-    type: AttrType
-
-
-class Vertex(TypedDict):
-    vid: str
-    label: str
-    attrs: list[Attr]
-
-
-class Edge(TypedDict):
-    eid: str
-    src_vid: str
-    dst_vid: str
-    label: str
-    attrs: list[Attr]
 
 
 class DisplayedInstr(TypedDict):
     vid: str
     type: InstructionType
     expand_eid_list: list[str]
-    single_op: str
+    single_op: Optional[str]
     multi_ops: list[str]
     target_var: str
     depend_on: list[str]

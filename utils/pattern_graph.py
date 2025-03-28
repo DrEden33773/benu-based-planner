@@ -1,16 +1,16 @@
 from dataclasses import dataclass, field
+from typing import Optional
 
 from parser.common import Edge
 from parser.pg_parser import AttrPG, SerializableAttrPG, attr_pg_to_serializable
 
-type EmptyDict = dict[str, str]
-""" ## 空字典 """
-type AttrInfo = SerializableAttrPG | EmptyDict
-""" ## 属性信息 = 属性字典 | 空字典 """
+type AttrInfo = Optional[SerializableAttrPG]
+
 type VertexInfo = tuple[str, AttrInfo]
 """ ### 标签, (属性) """
 type EdgeInfo = tuple[str, str, str, AttrInfo]
 """ ### 起点 vid, 终点 vid, 标签, (属性) """
+
 
 type VertexInfoDict = dict[str, VertexInfo]
 type EdgeInfoDict = dict[str, EdgeInfo]
