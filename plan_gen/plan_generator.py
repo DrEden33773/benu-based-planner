@@ -1,4 +1,4 @@
-from parser.common import AttrType, Op
+from parser.common import Op
 from parser.pg_parser import ParserPG
 from plan_gen.common import VarPrefix
 from plan_gen.exec_instr import ExecInstruction, InstructionType
@@ -285,8 +285,6 @@ class PlanGenerator:
                 attr_desc = self.pg.v_attrs[vid]
                 if attr_desc.op in (Op.Eq, Op.Ne):
                     score += 100  # 等值过滤最高优先级 (也包括 `不等值`)
-                elif attr_desc.r_type == AttrType.String:
-                    score += 30  # 字符串范围过滤
                 else:
                     score += 50  # 数值范围过滤
 
