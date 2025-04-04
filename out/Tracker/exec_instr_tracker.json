@@ -16,17 +16,6 @@
     ]
   },
   {
-    "type": "intersect",
-    "input_var_prefix": [
-      "A",
-      "T"
-    ],
-    "target_var_prefix": [
-      "C",
-      "T"
-    ]
-  },
-  {
     "type": "foreach",
     "input_var_prefix": [
       "C"
@@ -42,6 +31,17 @@
     ],
     "target_var_prefix": [
       "f"
+    ]
+  },
+  {
+    "type": "intersect",
+    "input_var_prefix": [
+      "A",
+      "T"
+    ],
+    "target_var_prefix": [
+      "C",
+      "T"
     ]
   }
 ]

@@ -122,7 +122,7 @@ class PlanGenerator:
                     )
                 )
             elif len(operands) == 1:
-                # fi = {Ax}
+                # Ci = {Ax}
                 exec_plan.append(
                     ExecInstruction(
                         vid=vid,
@@ -132,7 +132,7 @@ class PlanGenerator:
                     )
                 )
             else:
-                # fi = {Aw, Ax, ..., Ay, Az}
+                # Ti = {Aw, Ax, ..., Ay, Az}
                 multi_ops = [VarPrefix.DbQueryTarget + op for op in operands]
                 exec_plan.append(
                     ExecInstruction(
@@ -177,7 +177,7 @@ class PlanGenerator:
         embedding = [VarPrefix.EnumerateTarget + fid for fid in f_set]
         exec_plan.append(
             ExecInstruction(
-                vid=vid,
+                vid="",
                 type=InstructionType.Report,
                 multi_ops=embedding,
                 target_var=VarPrefix.EnumerateTarget,
@@ -206,9 +206,9 @@ class PlanGenerator:
                     depend_set.update(depend_record[op])
             else:
                 depend_set.update(instr.multi_ops)
-                for ops in instr.multi_ops:
-                    if ops in depend_record:
-                        depend_set.update(depend_record[ops])
+                for op in instr.multi_ops:
+                    if op in depend_record:
+                        depend_set.update(depend_record[op])
             depend_record[instr.target_var] = depend_set
             instr.depend_on = list(depend_set)
 

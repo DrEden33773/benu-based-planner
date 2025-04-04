@@ -1,5 +1,3 @@
-from typing import Optional
-
 from plan_gen.common import VarPrefix
 from plan_gen.exec_instr import ExecInstruction, InstructionType
 from plan_gen.plan_generator import PlanGenerator
@@ -78,7 +76,7 @@ class PlanOptimizer:
         """指令重排序"""
 
         exec_plan = self.exec_plan
-        self.plan_generator.compute_exec_plan_dependencies(exec_plan)
+        self.plan_generator.compute_exec_plan_dependencies(exec_plan)  # redundant
 
         certain_set: set[str] = {exec_plan[0].target_var}
 
@@ -108,7 +106,7 @@ class PlanOptimizer:
         print("    [Reorder Instructions ... Done]")
 
     def _flatten(self):
-        """展开所有指令 (multi_ops 最多只有一个 operands)"""
+        """展开所有指令 (multi_ops 最多只有 2 个 operands)"""
 
         exec_plan = self.exec_plan
         instr_idx: list[int] = []
@@ -141,13 +139,13 @@ class PlanOptimizer:
                     multi_ops=new_operators,
                     target_var=VarPrefix.IntersectTarget + f"@{self.Ti}",
                 )
-                exec_plan.insert(pos, new_instr)
                 pos += 1
+                exec_plan.insert(pos, new_instr)
                 offset += 1
 
             new_operators = list(operators)
-            exec_plan[pos].multi_ops = new_operators
             pos += 1
+            exec_plan[pos].multi_ops = new_operators
 
         print("    [Flatten Instructions ... Done]")
 
@@ -161,7 +159,6 @@ class PlanOptimizer:
             int_ops_pos: dict[str, int] = {}
 
             # 1. 找到所有的 `INT` 操作
-            instr: Optional[ExecInstruction] = None
             for idx, instr in enumerate(exec_plan):
                 if instr.type == InstructionType.GetAdj:
                     int_ops_pos[instr.target_var] = idx

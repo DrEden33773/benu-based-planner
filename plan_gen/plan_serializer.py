@@ -48,8 +48,6 @@ class PlanSerializer:
 
         plan_dict: PlanDict = {
             "matching_order": self.matching_order,
-            # "vertices": self.pg.get_all_v_info(),
-            # "edges": self.pg.get_all_e_info(),
             "vertices": {v_info["vid"]: v_info for v_info in self.pg.get_all_v_info()},
             "edges": {e_info["eid"]: e_info for e_info in self.pg.get_all_e_info()},
             "instructions": [to_displayed_instr(instr) for instr in self.exec_plan],

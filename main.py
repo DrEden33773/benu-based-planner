@@ -38,18 +38,14 @@ def dump_exec_instr_tracker():
 def main():
     QUERIES_DIR = Path(f"{SCRIPT_DIR}/queries")
 
-    # Iterate through all `.txt` files in the queries directory
     for query_file in QUERIES_DIR.glob("*.txt"):
-        # Get the filename without `.txt` extension
         src_filename = query_file.stem
 
         print(f"Processing query file `{query_file.name}`")
 
-        # Read file content
         with open(query_file, "r") as f:
             src = f.read()
 
-        # Parse
         parser = ParserPG(src)
         try:
             parser.parse()
@@ -57,7 +53,6 @@ def main():
             print(f"Error in `{query_file.name}`: {e}", file=stderr)
             continue
 
-        # Plan generation
         plan_gen(parser, src_filename)
         plan_gen_o3(parser, src_filename)
 

@@ -183,10 +183,6 @@ class ParserPG:
             eid, start_vid, end_vid, e_label = args
             edge = Edge(eid, start_vid, end_vid)
             self.e_labels[edge] = e_label
-            # if (e := self.vv_to_e.get((start_vid, end_vid))) and e != edge:
-            #     raise ParsingPGError(
-            #         f"Duplicate edge from `{start_vid}` to `{end_vid}`."
-            #     )
             self.vv_to_e[(start_vid, end_vid)] = edge
         self.line += self.e_num
 

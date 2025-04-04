@@ -111,7 +111,6 @@ class PatternGraph:
         - 属性
         """
 
-        # return self.v_labels[vid], attr_pg_to_serializable(self.v_attrs.get(vid))
         return {
             "vid": vid,
             "label": self.v_labels[vid],
@@ -127,7 +126,6 @@ class PatternGraph:
         - 属性
         """
 
-        # return {vid: self.get_v_info(vid) for vid in self.v_labels}
         return [self.get_v_info(vid) for vid in self.v_labels]
 
     def get_e_info(self, edge: Edge) -> EInfo:
@@ -140,12 +138,6 @@ class PatternGraph:
         - 属性
         """
 
-        # return (
-        #     edge.from_vid,
-        #     edge.to_vid,
-        #     self.e_labels[edge],
-        #     attr_pg_to_serializable(self.e_attrs.get(edge.eid)),
-        # )
         return {
             "eid": edge.eid,
             "src_vid": edge.from_vid,
@@ -167,7 +159,6 @@ class PatternGraph:
         (邻接边 `不限制` 方向)
         """
 
-        # return {edge.eid: self.get_e_info(edge) for edge in self.get_adj_e(vid)}
         return [self.get_e_info(edge) for edge in self.get_adj_e(vid)]
 
     def get_all_e_info(self) -> list[EInfo]:
@@ -181,5 +172,4 @@ class PatternGraph:
         - 属性
         """
 
-        # return {edge.eid: self.get_e_info(edge) for edge in self.e_labels}
         return [self.get_e_info(edge) for edge in self.e_labels]
